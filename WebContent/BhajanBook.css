@@ -21,14 +21,12 @@ body, html {
 .text {
   font-family: 'Great Vibes';
   position: static;
-  background-color:#FAEBD7;
+  background-color: black;
   text-align: center;
-  padding-top: 10px;
-  padding-bottom: 0px;
   color: white;
   font-weight:lighter;
   font-size: 50px;
-  text-shadow: 2px 2px black;
+  text-shadow: 4px 4px black;
 }
 
 
@@ -39,9 +37,9 @@ body, html {
 }
 
 .TFTD {
-  font-family: 'Great Vibes';
-  color: white;
-  text-shadow: 1px 1px black;
+  font-family: 'Acme';
+  padding-left: 50%;
+  color: black;
 }
 
 .fade-in{
