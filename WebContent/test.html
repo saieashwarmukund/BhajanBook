@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Test</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script language="javascript">
+    function changeImage(deity) {
+    	if (deity == "GANESHA") {
+	        document.getElementById("deity").src = "/BhajanBook/images/ganesha_01.jpg";
+	        document.getElementById("bhajan_txt").innerHTML = "Ganesha Bhajan List would appear here.";
+	    }
+    	else if (deity == "DEVI") {
+	        document.getElementById("deity").src = "/BhajanBook/images/devi_01.png";	    	
+	        document.getElementById("bhajan_txt").innerHTML = "Devi Bhajan List would appear here.";
+	    }
+    }
+    $(document).ready(function() {
+        $.ajax({
+            url: "http://localhost:8080/BhajanBook/rest/ThoughtForTheDay"
+        }).then(function(data) {
+        	$('#bhajan_txt').text(data.thought);
+        });
+    });
+
+</script>
+</head>
+<body>
+<TABLE>
+<TR>
+<TD>
+<p>
+        <img alt="" src="/BhajanBook/images/Baba_bg2_small.jpg" 
+           id="deity"  />
+</p>
+</TD>
+<TD>
+  <div id="bhajan_txt">
+  </div>
+</TD>
+</TR>
+</TABLE>
+<FORM>
+<INPUT TYPE=BUTTON value="Ganesha" onclick="return changeImage('GANESHA');">
+<BR><BR>
+<INPUT TYPE=BUTTON value="Devi" onclick="return changeImage('DEVI');">
+</FORM>
+</body>
+</html>
