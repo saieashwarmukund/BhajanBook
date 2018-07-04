@@ -6,6 +6,8 @@ import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.Path;
 
@@ -29,4 +31,16 @@ public class BhajanService  {
  	   List<BhajanTitleVO> bhajanList = bhajanDAO.getBhajanTitleList(deity);
  	   return bhajanList;
     }  
+    @GET
+    @Path("/show") 
+    @Produces(MediaType.APPLICATION_JSON)
+    public BhajanLyricsVO getBhajan(@QueryParam("id") String id, @Context HttpHeaders headers) {
+ 	   BhajanDAO bhajanDAO = new BhajanDAO();
+ 	   
+ 	   //String userAgent = headers.getRequestHeader("user_agent").get(0);
+ 	   //System.out.println("UserAgent is " +  userAgent);
+ 	   BhajanLyricsVO bhajanVO = bhajanDAO.getBhajan(id);
+ 	   return bhajanVO;
+    }  
+
 }

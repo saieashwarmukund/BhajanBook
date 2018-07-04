@@ -1,50 +1,84 @@
-<!DOCTYPE html>
-<html>
+
+ <!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Test</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
-<script language="javascript">
-    function changeImage(deity) {
-    	if (deity == "GANESHA") {
-	        document.getElementById("deity").src = "/BhajanBook/images/ganesha_01.jpg";
-	        document.getElementById("bhajan_txt").innerHTML = "Ganesha Bhajan List would appear here.";
-	    }
-    	else if (deity == "DEVI") {
-	        document.getElementById("deity").src = "/BhajanBook/images/devi_01.png";	    	
-	        document.getElementById("bhajan_txt").innerHTML = "Devi Bhajan List would appear here.";
-	    }
-    }
-    $(document).ready(function() {
-        $.ajax({
-            url: "http://localhost:8080/BhajanBook/rest/ThoughtForTheDay"
-        }).then(function(data) {
-        	$('#bhajan_txt').text(data.thought);
-        });
-    });
-
-</script>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="jquery.twbsPagination.min.js"></script>
+  <title>js-tutorials.com : Bootstrap Pagination Example Using jQuery </title>
 </head>
 <body>
-<TABLE>
-<TR>
-<TD>
-<p>
-        <img alt="" src="/BhajanBook/images/Baba_bg2_small.jpg" 
-           id="deity"  />
-</p>
-</TD>
-<TD>
-  <div id="bhajan_txt">
+  <div class="container" style="padding:10px 20px;">
+    <h2>Bootstrap Pagination Example Using jQuery</h2>
+	<div id="header"></div>
+	<table id="employee" class="table table-bordered table table-hover" cellspacing="0" width="100%">
+		<colgroup><col width="20%"><col width="35%"><col width="40%"></colgroup>
+	<thead>
+		<tr>
+			<th>Name</th>
+		</tr>
+	</thead>
+	<tbody id="bhajan_list_page">
+	</tbody>
+	</table>
+	<div id="pager">
+		<ul id="pagination" class="pagination-sm"></ul>
+	</div>
+	<div class="col-sm-10" style="margin:20px 0px 20px 0px;">
+		<a class="btn btn-default read-more" style="background:#3399ff;color:white" href="https://www.js-tutorials.com/javascript-tutorial/simple-example-pagination-using-jquery-bootstrap/">Back to Tutorial</a>
+	</div>
+	<div id="footer"></div>
   </div>
-</TD>
-</TR>
-</TABLE>
-<FORM>
-<INPUT TYPE=BUTTON value="Ganesha" onclick="return changeImage('GANESHA');">
-<BR><BR>
-<INPUT TYPE=BUTTON value="Devi" onclick="return changeImage('DEVI');">
-</FORM>
 </body>
 </html>
+<script type="text/javascript">
+  $(document).ready(function(){
+	$('#header').load('../header-ads.html');
+    $('#footer').load('../footer-ads.html');
+	
+	var $pagination = $('#pagination'),
+		totalRecords = 0,
+		records = [],
+		displayRecords = [],
+		recPerPage = 10,
+		page = 1,
+		totalPages = 0;
+           
+	$.ajax({
+		url: "/BhajanBook/rest/Bhajan?deity=GANESHA",
+		async: true,
+		dataType: 'json',
+		success: function (data) {
+			records = data;
+			console.log(records);
+			totalRecords = records.length;
+			totalPages = Math.ceil(totalRecords / recPerPage);
+			apply_pagination();
+		}
+	});
+	function generate_table() {
+		var tr;
+		$('#bhajan_list_page').html('');
+		for (var i = 0; i < displayRecords.length; i++) {
+			tr = $('<tr/>');
+			tr.append("<td>" + displayRecords[i].bhajanTitle + "</td>");
+			$('#bhajan_list_page').append(tr);
+		}
+	}
+	function apply_pagination() {
+		$pagination.twbsPagination({
+			totalPages: totalPages,
+			visiblePages: 6,
+			onPageClick: function (event, page) {
+				displayRecordsIndex = Math.max(page - 1, 0) * recPerPage;
+				endRec = (displayRecordsIndex) + recPerPage;
+				console.log(displayRecordsIndex + 'ssssssssss'+ endRec);
+				displayRecords = records.slice(displayRecordsIndex, endRec);
+				generate_table();
+			}
+		});
+	}
+  });
+</script>
+ 

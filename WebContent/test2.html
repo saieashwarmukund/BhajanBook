@@ -1,0 +1,96 @@
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="BhajanBook.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="Bootstrap4/css/bootstrap.min.css">
+<link href='https://fonts.googleapis.com/css?family=Great Vibes|Acme' rel='stylesheet'>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script src="BhajanBook.js"></script>
+<script src="Bootstrap4/js/bootstrap.min.js"></script>
+<script src="jquery.twbsPagination.min.js"></script>
+  <title>js-tutorials.com : Bootstrap Pagination Example Using jQuery </title>
+</head>
+<body>
+  <div id="bhajans_card" class="col-sm-9">
+    <div class="row">
+      <div class="" style="padding-left:30px">
+        <h5 id="bhajans_list_title" class="card-title"></h5>
+        <div class="container" style="padding:10px 20px;">
+			<table id="bhajan_table" class="table table-bordered table table-hover" cellspacing="0" width="100%">
+			<colgroup><col width="100%"></colgroup>
+			<thead>
+			<tr>
+			<th>Bhajan</th>
+			</tr>
+			</thead>
+			<tbody id="bhajan_list_page">
+			</tbody>
+			</table>
+			<div id="pager">
+			<ul id="pagination" class="pagination-sm"></ul>
+			</div>
+			<div class="col-sm-10" style="margin:20px 0px 20px 0px;">
+			<a class="btn btn-default read-more" style="background:#3399ff;color:white" href="https://www.js-tutorials.com/javascript-tutorial/simple-example-pagination-using-jquery-bootstrap/">Back to Tutorial</a>
+			</div>
+	  </div>
+    </div>
+  </div>
+  </div>
+  <button type="button" onclick="myfunction()">Click Me!</button>
+</body>
+
+</html>
+<script type="text/javascript">
+	
+	var $pagination = $('#pagination'),
+		totalRecords = 0,
+		records = [],
+		displayRecords = [],
+		recPerPage = 10,
+		page = 1,
+		totalPages = 0;
+	
+	function myfunction() {       
+	$.ajax({
+		url: "/BhajanBook/rest/Bhajan?deity=GANESHA",
+		async: true,
+		dataType: 'json',
+		success: function (data) {
+			records = data;
+			console.log(records);
+			totalRecords = records.length;
+			totalPages = Math.ceil(totalRecords / recPerPage);
+			apply_pagination();
+		}
+	});
+	}
+	function generate_table() {
+		var tr;
+		$('#bhajan_list_page').html('');
+		for (var i = 0; i < displayRecords.length; i++) {
+			tr = $('<tr/>');
+			tr.append("<td>" + displayRecords[i].bhajanTitle + "</td>");
+			$('#bhajan_list_page').append(tr);
+		}
+	}
+	function apply_pagination() {
+		$pagination.twbsPagination({
+			totalPages: totalPages,
+			visiblePages: 6,
+			onPageClick: function (event, page) {
+				displayRecordsIndex = Math.max(page - 1, 0) * recPerPage;
+				endRec = (displayRecordsIndex) + recPerPage;
+				console.log(displayRecordsIndex + 'ssssssssss'+ endRec);
+				displayRecords = records.slice(displayRecordsIndex, endRec);
+				generate_table();
+			}
+		});
+	}
+ 
+</script>
+ 

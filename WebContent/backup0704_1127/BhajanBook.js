@@ -49,13 +49,15 @@ function showDeityBhajans(deity) {
 	hideCard("TFTD_card");
 	showCard("main_panel");
 	showCard("bhajans_card")
-	showDeityPic(deity);
-	showBhajanPages(deity);
+	deityUpper = deity.toUpperCase();
+	alert('DEITYUPPER IS '+ deityUpper);
+	showDeityPic(deityUpper);
+	showBhajanPages(deityUpper);
 }
 
 function showDeityPic(deity) {
 	var el = document.getElementById("deity_image");
-	var imageref = deities_dict[deity.toUpperCase()];
+	var imageref = deities_dict[deity];
 	if (imageref == undefined) {
 		alert("Deity Unrecognized. Please contact support. ");
 		return;

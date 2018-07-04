@@ -3,11 +3,16 @@ body, html {
   background-color: #FAEBD7;
 }
 
+body {
+margin: 0px;
+padding: 0px;
+background-color: #FAEBD7;
+}
 
 .bg {
   background-color: #FAEBD7;
   position: relative;
-  height: 720px;
+  height: auto;
   width: auto;
   background-position: center;
   background-repeat: no-repeat;
@@ -16,6 +21,12 @@ body, html {
 .responsive {
     width: 100%;
     height: auto;
+}
+
+.logo {
+	font-family: 'Great Vibes';
+	font-weight:bolder;
+	font-size: 50px;
 }
 
 .text {
@@ -124,4 +135,42 @@ body, html {
 h2 {
   font-size: 30px;
 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Bootstrap customization
+
+$theme-colors:(
+	primary: #f1f1f1
+);
+
+@import "node_modules/bootstrap/scss/variables";
+
+.card-custom {
+	background-color:#FAEBD7;
+	}
+
+.icon{
+	width:70px;;
+}
+
+.centered {
+	margin-left:auto;
+	margin-right:auto;
 }
