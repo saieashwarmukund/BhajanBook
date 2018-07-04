@@ -10,7 +10,8 @@ public class BhajanLyricsVO extends BhajanTitleVO {
 	private String beat;
 
 	private String audioFilePath;
-
+	
+	// Todo: Add date added.
 	public BhajanLyricsVO() {
 		initialize();
 	}
