@@ -1,16 +1,26 @@
 body, html {
   height: 100%;
-  background-color: #FAEBD7;
+  text-align:center;
+  background-image: url("https://i.imgur.com/g2nXBAx.jpg");
+  background-repeat-x: no-repeat;
+  background-size:100% 100vh;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-attachment: fixed;
+	width: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden; 
 }
 
 body {
 margin: 0px;
 padding: 0px;
-background-color: #FAEBD7;
 }
 
 .bg {
-  background-color: #FAEBD7;
   position: relative;
   height: auto;
   width: auto;
@@ -134,7 +144,21 @@ background-color: #FAEBD7;
 
 h2 {
   font-size: 30px;
+}
 
+.copyright-bg {
+	background-color: #F3F3F3;
+}
+
+
+
+#main_panel {
+	padding-top:10px;
+}
+
+.nav-link {
+	font-size:16px;
+	text-align:center;
 }
 
 
@@ -142,25 +166,6 @@ h2 {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-//Bootstrap customization
-
-$theme-colors:(
-	primary: #f1f1f1
-);
-
-@import "node_modules/bootstrap/scss/variables";
 
 .card-custom {
 	background-color:#FAEBD7;
@@ -170,7 +175,47 @@ $theme-colors:(
 	width:70px;;
 }
 
+.deity_icons {
+	font-size:110%;
+	color:black;
+}
+
+
+a:hover {
+	font-weight:900;
+    color: maroon;
+    text-decoration:none;
+}
+
+/* selected link */
+a:active {
+	font-weight:900;
+    color: maroon;
+    text-decoration:none;
+} 
+
+
 .centered {
 	margin-left:auto;
 	margin-right:auto;
 }
+
+
+
+@media (max-width: 768px) {
+      #deity_image  {
+            display:none;
+   }
+ }
+ 
+::-webkit-scrollbar
+{
+    width: 0px;
+}
+::-webkit-scrollbar-track-piece
+{
+    background-color: transparent;
+    -webkit-border-radius: 6px;
+}
+
+ 
