@@ -2,15 +2,12 @@ package org.bhajanbook.service;
 
 public class BhajanLyricsVO extends BhajanTitleVO {
 	private String lyrics;
-
+	private String meaning;
 	private String lang;
-
 	private String raaga;
-
 	private String beat;
-
 	private String audioFilePath;
-	
+
 	// Todo: Add date added.
 	public BhajanLyricsVO() {
 		initialize();
@@ -19,7 +16,7 @@ public class BhajanLyricsVO extends BhajanTitleVO {
 	public String getAudioFilePath() {
 		return audioFilePath;
 	}
-
+	
 	public String getBeat() {
 		return beat;
 	}
@@ -32,9 +29,14 @@ public class BhajanLyricsVO extends BhajanTitleVO {
 		return lyrics;
 	}
 
+	public String getMeaning() {
+		return meaning;
+	}
+
 	public String getRaaga() {
 		return raaga;
 	}
+
 	private void initialize() {
 		lyrics = "";
 		lang = "";
@@ -51,9 +53,12 @@ public class BhajanLyricsVO extends BhajanTitleVO {
 	public void setLang(String lang) {
 		this.lang = lang;
 	}
-
 	public void setLyrics(String lyrics) {
 		this.lyrics = lyrics;
+	}
+
+	public void setMeaning(String meaning) {
+		this.meaning = meaning;
 	}
 	
 	public void setRaaga(String raaga) {

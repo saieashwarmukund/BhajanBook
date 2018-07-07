@@ -82,13 +82,27 @@ function showLyricsCard(bhajanObject) {
 	if (bhajanObject.audioFilePath != "") {
 			bhajanAudio.innerHTML = 
 				"<audio controls><source src=" + bhajanObject.audioFilePath + "\">Your browser does not support the audio element.</audio>";		
-	}
-	else {
+	} else {
 		bhajanAudio.innerHTML = "<br>" ;
 	}
-	//bhajanMeaning.innerHTML = bhajanObject.meaning;
-	bhajanRaaga.innerHTML = bhajanObject.raaga;
-	bhajanBeat.innerHTML = bhajanObject.beat;
+	
+	if (bhajanObject.meaning != "") {
+		bhajanMeaning.innerHTML = "<p class='text-justify'><b>Meaning: </b><i>" + bhajanObject.meaning + "</i></p>";
+	} else {
+		bhajanMeaning.innerHTML = "<br>" ;
+	}
+	
+	if (bhajanObject.raaga != undefined && bhajanObject.raaga != "") {
+		bhajanRaaga.innerHTML   = "<p><b>Raaga: </b>" + bhajanObject.raaga + "</p>";
+	} else {
+		bhajanRaaga.innerHTML = "<br>" ;
+	}
+ 
+	if (bhajanObject.beat != undefined && bhajanObject.beat != "") {
+		bhajanBeat.innerHTML    = "<p><b>Beat: </b>" + bhajanObject.beat + "</p>";
+	} else {
+		bhajanBeat.innerHTML = "<br>" ;
+	}
 }
 
 function goBackToBhajans(){

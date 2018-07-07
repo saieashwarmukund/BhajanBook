@@ -3,6 +3,7 @@ package org.bhajanbook.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -34,13 +35,18 @@ public class BhajanService  {
     @GET
     @Path("/show") 
     @Produces(MediaType.APPLICATION_JSON)
-    public BhajanLyricsVO getBhajan(@QueryParam("id") String id, @Context HttpHeaders headers) {
+    public BhajanLyricsVO getBhajan(@Context HttpHeaders headers, @Context HttpServletRequest request,  @QueryParam("id") String id) {
  	   BhajanDAO bhajanDAO = new BhajanDAO();
  	   
- 	   //String userAgent = headers.getRequestHeader("user_agent").get(0);
- 	   //System.out.println("UserAgent is " +  userAgent);
+ 	   List<String> userAgentList = headers.getRequestHeader("User-Agent");
+ 	   String userAgent = "";
+ 	   if (userAgentList != null) {
+ 		   userAgent = userAgentList.get(0);
+ 	   }
+ 	   String ip = request.getRemoteAddr();
  	   BhajanLyricsVO bhajanVO = bhajanDAO.getBhajan(id);
+ 	   bhajanDAO.logBhajanAccess(id, userAgent, ip);
  	   return bhajanVO;
-    }  
+    }
 
 }
