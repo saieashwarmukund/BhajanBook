@@ -13,6 +13,7 @@ body, html {
     margin: 0px;
     padding: 0px;
     overflow-x: hidden; 
+    -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -160,7 +161,6 @@ h2 {
 	font-size:16px;
 	text-align:center;
 }
-
 
 
 
