@@ -19,10 +19,14 @@ public class BhajanDAO {
 			// Get DB Connection.
 			conn = DBConnection.getDBConnection();
 			Statement stmt = conn.createStatement();
+			Thread.sleep(5000);
 			StringBuffer queryStr = new StringBuffer("select b.bhajan_id, bhajan_title  from bhajandb.bhajan b, bhajandb.bhajan_deity bd ");
 			
-			queryStr.append(" where b.bhajan_id = bd.bhajan_id and bd.deity = '");
-			queryStr.append(deity.toUpperCase() + "'");
+			queryStr.append(" where b.bhajan_id = bd.bhajan_id ");
+			if (!"ALL".equals(deity.toUpperCase())) { // If Not ALL.
+				queryStr.append( " and bd.deity = '");
+				queryStr.append(deity.toUpperCase() + "'");
+			}
 			
 			ResultSet rs = stmt.executeQuery(queryStr.toString());
 			

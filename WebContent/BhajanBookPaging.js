@@ -3,7 +3,7 @@
 		totalRecords = 0,
 		records = [],
 		displayRecords = [],
-		recPerPage = 9,
+		recPerPage = 50,
 		page = 1,
 		totalPages = 0;
 
@@ -12,7 +12,8 @@ function showBhajanPages(deity) {
 	$('#bhajan_list_page').html(''); 
 	$pagination = $('#pagination');
 	$('.pagination').twbsPagination('destroy');
-
+	var bhajanLoading = document.getElementById("bhajan_list_page");
+	bhajanLoading.innerHTML = "<center><img src='/BhajanBook/images/icons/loading_image.gif' style='width:50px; position:center;'></img></center>";
 	urlvar = "/BhajanBook/rest/Bhajan?deity="+deity.toUpperCase();
 	$.ajax({
 		url: urlvar,
@@ -23,7 +24,8 @@ function showBhajanPages(deity) {
 			console.log(records);
 			totalRecords = records.length;
 			totalPages = Math.ceil(totalRecords / recPerPage);
-			apply_pagination();
+			displayRecords = data;
+			generate_table();
 		},
 		error: function (jqXHR, exception) {
 			var msg = '';
