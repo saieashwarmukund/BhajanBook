@@ -37,7 +37,6 @@ public class BhajanService  {
     @Produces(MediaType.APPLICATION_JSON)
     public BhajanLyricsVO getBhajan(@Context HttpHeaders headers, @Context HttpServletRequest request,  @QueryParam("id") String id) {
  	   BhajanDAO bhajanDAO = new BhajanDAO();
- 	   
  	   List<String> userAgentList = headers.getRequestHeader("User-Agent");
  	   String userAgent = "";
  	   if (userAgentList != null) {

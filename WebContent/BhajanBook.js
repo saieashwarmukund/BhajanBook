@@ -10,13 +10,11 @@ var KRISHNA_IMAGE = "/BhajanBook/images/deities/krishna.jpg";
 var NARAYANA_IMAGE = "/BhajanBook/images/deities/narayana.jpg";
 var RAMA_IMAGE = "/BhajanBook/images/deities/rama.jpg";
 var SAI_IMAGE = "/BhajanBook/images/deities/sai.jpg";
-var SARVA_DHARMA_IMAGE = "/BhajanBook/images/deities/sarva_dharma.jpg";
+var SARVA_DHARMA_IMAGE = "/BhajanBook/images/deities/sarva_dharma.png";
 var SHIRDI_IMAGE = "/BhajanBook/images/deities/shirdi.jpg";
 var SHIVA_IMAGE = "/BhajanBook/images/deities/shiva.jpg";
 var SUBRAMANYA_IMAGE = "/BhajanBook/images/deities/subramanya.jpg";
 var VITTHALA_IMAGE = "/BhajanBook/images/deities/vitthala.jpg";
-
-var APP_BASE_URL = "http://192.168.1.136:8080/BhajanBook/"
 
 var deities_dict = {"ALL": ALL_IMAGE,"DEVI": DEVI_IMAGE, "EASHWARAMBA": EASHWARAMBA_IMAGE, "GANESHA": GANESHA_IMAGE,
 		"GURU": GURU_IMAGE, "HANUMAN": HANUMAN_IMAGE, "KRISHNA": KRISHNA_IMAGE, "NARAYANA": NARAYANA_IMAGE,
@@ -27,6 +25,7 @@ var deities_dict = {"ALL": ALL_IMAGE,"DEVI": DEVI_IMAGE, "EASHWARAMBA": EASHWARA
 
 $(document).ready(function() {
 	hideCard("main_panel");
+	hideCard("search_bar");
 	$.ajax({
 		url: "/BhajanBook/rest/ThoughtForTheDay"
 	}).then(function(data) {
@@ -81,37 +80,41 @@ function showLyricsCard(bhajanObject) {
 	bhajanLyrics.innerHTML = bhajanObject.lyrics;
 	if (bhajanObject.audioFilePath != "") {
 			bhajanAudio.innerHTML = 
-				"<audio controls><source src=" + bhajanObject.audioFilePath + "\">Your browser does not support the audio element.</audio>";		
+				"<audio controls><source src=" + bhajanObject.audioFilePath + "\">Your browser does not support the audio element.</audio><br><br>";		
 	} else {
-		bhajanAudio.innerHTML = "<br>" ;
+		bhajanAudio.innerHTML = "" ;
 	}
 	
 	if (bhajanObject.meaning != "") {
 		bhajanMeaning.innerHTML = "<p class='text-justify'><b>Meaning: </b><i>" + bhajanObject.meaning + "</i></p>";
 	} else {
-		bhajanMeaning.innerHTML = "<br>" ;
+		bhajanMeaning.innerHTML = "" ;
 	}
 	
 	if (bhajanObject.raaga != undefined && bhajanObject.raaga != "") {
 		bhajanRaaga.innerHTML   = "<p><b>Raaga: </b>" + bhajanObject.raaga + "</p>";
 	} else {
-		bhajanRaaga.innerHTML = "<br>" ;
+		bhajanRaaga.innerHTML = "" ;
 	}
  
 	if (bhajanObject.beat != undefined && bhajanObject.beat != "") {
 		bhajanBeat.innerHTML    = "<p><b>Beat: </b>" + bhajanObject.beat + "</p>";
 	} else {
-		bhajanBeat.innerHTML = "<br>" ;
+		bhajanBeat.innerHTML = "" ;
 	}
 }
 
 function goBackToBhajans(){
+	var bhajanAudio = document.getElementById("bhajan_audio");
 	showCard("bhajans_card");
 	hideCard("lyrics_card");
+	bhajanAudio.innerHTML = "";
 }
 
 function showBhajanLyrics(id) {
-	var urlvar = "/BhajanBook/rest/Bhajan/show?id="+id;
+    var d = new Date();
+    var n = d.getTime();
+	var urlvar = "/BhajanBook/rest/Bhajan/show?id="+id+"&groupId=" + n;
 	$.ajax({
 		url: urlvar,
 		dataType: 'json',
@@ -151,6 +154,22 @@ $('.scrollable').on('scroll', function(){
 	    $el.append('more text added on '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'<br>');
 	  }
 	});
+
+$(document).ready(function(){
+	$('#nav-icon1,#nav-icon2,#nav-icon3,#nav-icon4').click(function(){
+		$(this).toggleClass('open');
+	});
+});
+
+function showSearch() {
+	   var nav = document.getElementById("nav"); 
+	   var search = document.getElementById("search_bar");
+
+	   nav.style.display = (
+	       nav.style.display == "none" ? "block" : "none"); 
+	   search.style.display = (
+	       search.style.display == "none" ? "block" : "none"); 
+	}
 
 
 
