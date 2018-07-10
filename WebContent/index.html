@@ -23,43 +23,44 @@
 
 </head>
 
-<body>
+<body class="Site">
+<div class="Site-content">
 
-<div class="container-fullwidth">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <a class="logo navbar-brand" href="http://192.168.1.136:8080/BhajanBook/" ><img src="/BhajanBook/images/BhajanBook_logo.png" style="height:40px;"></a>
+<div class="container-fullwidth" id="nav">
+<div style="background-color:white">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white w3-animate-opacity" id="nav1">
+        <a class="logo navbar-brand" href="/BhajanBook/" ><img src="/BhajanBook/images/BhajanBook_logo.png" style="height:40px;"></a>
+       
+        <img onclick="showSearch()" class="img-responsive" src="https://i.imgur.com/NgZcVuz.png" style="height:20px;"></img>
         
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
-        	<span class="navbar-toggler-icon"></span>
+        		<span class="navbar-toggler-icon"></span>
         </button>
         
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="http://192.168.1.136:8080/BhajanBook/">Home</a>
+                    <a class="nav-link" href="/BhajanBook/">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">Bhajans</a>
-                	<div class="dropdown-menu">
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('All')" data-toggle="collapse" data-target=".navbar-collapse.show">All</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Devi')" data-toggle="collapse" data-target=".navbar-collapse.show">Devi</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Eashwaramba')" data-toggle="collapse" data-target=".navbar-collapse.show">Eashwaramba</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Ganesha')" data-toggle="collapse" data-target=".navbar-collapse.show">Ganesha</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Guru')" data-toggle="collapse" data-target=".navbar-collapse.show">Guru</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Hanuman')" data-toggle="collapse" data-target=".navbar-collapse.show">Hanuman</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Krishna')" data-toggle="collapse" data-target=".navbar-collapse.show">Krishna</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Narayana')" data-toggle="collapse" data-target=".navbar-collapse.show">Narayana</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Rama')" data-toggle="collapse" data-target=".navbar-collapse.show">Rama</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Sai')" data-toggle="collapse" data-target=".navbar-collapse.show">Sai</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Sarva Dharma')" data-toggle="collapse" data-target=".navbar-collapse.show">Sarva Dharma</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Shirdi')" data-toggle="collapse" data-target=".navbar-collapse.show">Shirdi</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Shiva')" data-toggle="collapse" data-target=".navbar-collapse.show">Shiva</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Subramanya')" data-toggle="collapse" data-target=".navbar-collapse.show">Subramanya</a>
-                		<a class="dropdown-item" href="#" onclick="showDeityBhajans('Vitthala')" data-toggle="collapse" data-target=".navbar-collapse.show">Vitthala</a>
+                    <a class="bhajan_dropdown nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown">Bhajans</a>
+                	<div class="dropdown-menu text-center text-lg-left" style="border:0px;">
+                		<a class="dropdown-item" onclick="showDeityBhajans('All')" data-toggle="collapse" data-target=".navbar-collapse.show">All</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Devi')" data-toggle="collapse" data-target=".navbar-collapse.show">Devi</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Eashwaramba')" data-toggle="collapse" data-target=".navbar-collapse.show">Eashwaramba</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Ganesha')" data-toggle="collapse" data-target=".navbar-collapse.show">Ganesha</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Guru')" data-toggle="collapse" data-target=".navbar-collapse.show">Guru</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Hanuman')" data-toggle="collapse" data-target=".navbar-collapse.show">Hanuman</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Krishna')" data-toggle="collapse" data-target=".navbar-collapse.show">Krishna</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Narayana')" data-toggle="collapse" data-target=".navbar-collapse.show">Narayana</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Rama')" data-toggle="collapse" data-target=".navbar-collapse.show">Rama</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Sai')" data-toggle="collapse" data-target=".navbar-collapse.show">Sai</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Sarva Dharma')" data-toggle="collapse" data-target=".navbar-collapse.show">Sarva Dharma</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Shirdi')" data-toggle="collapse" data-target=".navbar-collapse.show">Shirdi</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Shiva')" data-toggle="collapse" data-target=".navbar-collapse.show">Shiva</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Subramanya')" data-toggle="collapse" data-target=".navbar-collapse.show">Subramanya</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('Vitthala')" data-toggle="collapse" data-target=".navbar-collapse.show">Vitthala</a>
                 	</div>
-                </li>
-                <li class="nav-item">
-                	<a class="nav-link" href="#"><i class="fa fa-search"></i></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
@@ -67,14 +68,22 @@
             </ul>
         </div>
     </nav>
-</div> 
+    </div>
+</div>
 
+<div id="search_bar" style="height:99px;background-color:white;">
+		<form class="w3-animate-opacity search_field" style="padding-top:30px;">
+			<img class="img-responsive" src="https://i.imgur.com/gN3jfB1.png" onclick="showSearch()" style="height:20px;">
+			<input type="text" placeholder="Search for Bhajan" style="text-align:center;height:40px; width:70%;font-size:23px;">
+			<img class="img-responsive" src="https://i.imgur.com/NgZcVuz.png" onclick="" style="height:20px;">
+		</form>
+	</div>
 
  <div id="TFTD_card">
 	<div class="fade-in">
 	  <div id="image-band">
 	     <img class="responsive" src="images/Baba_bg.png"/>
-	     <div class="top-right TFTD" style="font-size:3vw"></div>
+	     <div class="top-right TFTD" style="font-size:3vw; color:maroon"></div>
 	  </div>
 	</div>
  </div>
@@ -82,9 +91,9 @@
  
  
  
-<div id="main_panel" class="fade-in">
+<div id="main_panel" class="w3-animate-opacity">
 <div class="row">
-  <div id="deity_card" class="col-sm-3 w-50">
+  <div id="deity_card" class="col-sm-3 w-50 fade-in">
     <div class="row">
       <div class="" style="padding-left:30px; padding-bottom:20px;">
             <div id="deity_image" class="responsive">
@@ -93,7 +102,7 @@
     </div>
   </div>
  
-  <div id="bhajans_card" class="col-sm-9 fade-in">
+  <div id="bhajans_card" class="col-sm-9 w3-animate-opacity">
     <div class="row">
       <div class="" style="padding-left:10px">
         <b><h5 id="bhajans_list_title" class="card-title" style="font-weight:bold;font-size:150%; text-align:center"></h5></b>
@@ -111,43 +120,44 @@
 </div>
 
   
-  <div id="lyrics_card" class="col-sm-9 fade-in">
+  <div id="lyrics_card" class="col-sm-9 w3-animate-opacity">
       <div class="card-body col-md-12 text-center text-md-left p-2">
         <u><h5 class="card-title" id="bhajan_title" style="font-size:150%"></h5></u>
         <pre class="card-text" id="bhajan_lyrics" style="font-family:arial; font-size:100%"></pre>
-        <div id="bhajan_audio"></div><br>
+        <div id="bhajan_audio"></div>
         <div id="bhajan_meaning"></div>
         <div id="bhajan_raaga"></div>
         <div id="bhajan_beat"></div>
-        <a href="#" onclick="goBackToBhajans()" class="btn btn-dark">Back</a>
+        <a  onclick="goBackToBhajans()" class="btn btn-light">Back</a>
       </div>
   </div>
 </div>
 </div>
 
-<div class="row fade-in" style="padding-top:25px">
+<div class="row w3-animate-opacity" style="padding-top:25px">
 <div class="mx-auto">
 <table><tr>
-<td class="small" valign="middle" align="center"><a href=# onclick="showDeityBhajans('Devi')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/devi_icon.png"><br>Devi</a></td>
-<td class="small" valign="middle" align="center"><a href=# onclick="showDeityBhajans('Ganesha')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/ganesha_icon.png"><br>Ganesha</a></td>
-<td class="small" valign="middle" align="center"><a href=# onclick="showDeityBhajans('Guru')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/guru_icon.png"><br>Guru</a></td>
-<td class="small" valign="middle" align="center"><a href=# onclick="showDeityBhajans('Hanuman')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/hanuman_icon.png"><br>Hanuman</a></td>
-<td class="small" valign="middle" align="center"><a href=# onclick="showDeityBhajans('Krishna')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/krishna_icon.png"><br>Krishna</a></td>
+<td class="small" valign="middle" align="center"><a href="#" onclick="showDeityBhajans('Devi')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/devi_icon.png"><br>Devi</a></td>
+<td class="small" valign="middle" align="center"><a href="#" onclick="showDeityBhajans('Ganesha')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/ganesha_icon.png"><br>Ganesha</a></td>
+<td class="small" valign="middle" align="center"><a href="#" onclick="showDeityBhajans('Guru')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/guru_icon.png"><br>Guru</a></td>
+<td class="small" valign="middle" align="center"><a href="#" onclick="showDeityBhajans('Hanuman')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/hanuman_icon.png"><br>Hanuman</a></td>
+<td class="small" valign="middle" align="center"><a href="#" onclick="showDeityBhajans('Krishna')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/krishna_icon.png"><br>Krishna</a></td>
 </tr></table>
 </div>
 </div>
 
-<div class="row fade-in">
+<div class="row w3-animate-opacity">
 <div class="mx-auto">
 <table>
 <tr >
-<td class="small" valign="middle" align="center"><a href=# onclick="showDeityBhajans('Narayana')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/narayana_icon.png"><br>Narayana</a></td>
-<td class="small" valign="middle" align="center"><a href=# onclick="showDeityBhajans('Rama')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/rama_icon.png"><br>Rama</a></td>
-<td class="small" valign="middle" align="center"><a href=# onclick="showDeityBhajans('Sai')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/sai_icon.png"><br>Sai</a></td>
-<td class="small" valign="middle" align="center"><a href=# onclick="showDeityBhajans('Sarva Dharma')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/sarva_dharma_icon.png"><br>Sarva Dharma</a></td>
-<td class="small" valign="middle" align="center"><a href=# onclick="showDeityBhajans('Shiva')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/shiva_icon.png"><br>Shiva</a></td></tr></table></div>
+<td class="small" valign="middle" align="center"><a href="#" onclick="showDeityBhajans('Narayana')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/narayana_icon.png"><br>Narayana</a></td>
+<td class="small" valign="middle" align="center"><a href="#" onclick="showDeityBhajans('Rama')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/rama_icon.png"><br>Rama</a></td>
+<td class="small" valign="middle" align="center"><a href="#" onclick="showDeityBhajans('Sai')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/sai_icon.png"><br>Sai</a></td>
+<td class="small" valign="middle" align="center"><a href="#" onclick="showDeityBhajans('Sarva Dharma')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/sarva_dharma_icon.png"><br>Sarva Dharma</a></td>
+<td class="small" valign="middle" align="center"><a href="#" onclick="showDeityBhajans('Shiva')" class="deity_icons"><img class="icon" src="/BhajanBook/images/icons/shiva_icon.png"><br>Shiva</a></td></tr></table></div>
 </div>
 <br><br><br>
+</div>
 
 <!-- Footer -->
 <footer class="page-footer font-small special-color-dark pt-4 bg-white">
@@ -182,16 +192,13 @@
 
     </div>
     <!-- Footer Elements -->
-
     <!-- Copyright -->
-    <div class="footer-copyright text-center py-3 copyright-bg">© 2018 Copyright:
-      <a href="https://mdbootstrap.com/bootstrap-tutorial/"> MDBootstrap.com</a>
+    <div class="footer-copyright text-center py-3 copyright-bg no-hover">© 2018 Copyright:
+      <a href="/BhajanBook">www.saibhajanbook.org</a><br>
+      <a href="mailto:saibhajanbookapp@gmail.com">saibhajanbookapp@gmail.com</a>
     </div>
     <!-- Copyright -->
-
   </footer>
   <!-- Footer -->
-
-
 </body>
 </html>
