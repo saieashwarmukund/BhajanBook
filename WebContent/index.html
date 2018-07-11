@@ -3,16 +3,14 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<link rel="stylesheet" href="Bootstrap4/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="Bootstrap4/css/bootstrap.min.css">
 <link href='https://fonts.googleapis.com/css?family=Great Vibes|Acme' rel='stylesheet'>
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="https://use.fontawesome.com/000aaaa000.js"></script>
-<script src="BhajanBook.js"></script>
-<script src="BhajanBookPaging.js"></script>
 <script src="Bootstrap4/js/bootstrap.min.js"></script>
 <script src="jquery.twbsPagination.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -28,7 +26,7 @@
 
 <div class="container-fullwidth" id="nav">
 <div style="background-color:white">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white w3-animate-opacity" id="nav1">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white w3-animate-opacity">
         <a class="logo navbar-brand" href="/BhajanBook/" ><img src="/BhajanBook/images/BhajanBook_logo.png" style="height:40px;"></a>
        
         <img onclick="showSearch()" class="img-responsive" src="https://i.imgur.com/NgZcVuz.png" style="height:20px;"></img>
@@ -43,11 +41,12 @@
                     <a class="nav-link" href="/BhajanBook/">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="bhajan_dropdown nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown">Bhajans</a>
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">Bhajans</a>
                 	<div class="dropdown-menu text-center text-lg-left" style="border:0px;">
                 		<a class="dropdown-item" onclick="showDeityBhajans('All')" data-toggle="collapse" data-target=".navbar-collapse.show">All</a>
                 		<a class="dropdown-item" onclick="showDeityBhajans('Devi')" data-toggle="collapse" data-target=".navbar-collapse.show">Devi</a>
                 		<a class="dropdown-item" onclick="showDeityBhajans('Eashwaramba')" data-toggle="collapse" data-target=".navbar-collapse.show">Eashwaramba</a>
+                		<a class="dropdown-item" onclick="showDeityBhajans('English')" data-toggle="collapse" data-target=".navbar-collapse.show">English</a>
                 		<a class="dropdown-item" onclick="showDeityBhajans('Ganesha')" data-toggle="collapse" data-target=".navbar-collapse.show">Ganesha</a>
                 		<a class="dropdown-item" onclick="showDeityBhajans('Guru')" data-toggle="collapse" data-target=".navbar-collapse.show">Guru</a>
                 		<a class="dropdown-item" onclick="showDeityBhajans('Hanuman')" data-toggle="collapse" data-target=".navbar-collapse.show">Hanuman</a>
@@ -72,11 +71,11 @@
 </div>
 
 <div id="search_bar" style="height:99px;background-color:white;">
-		<form class="w3-animate-opacity search_field" style="padding-top:30px;">
+		<div class="w3-animate-opacity search_field" style="padding-top:30px;">
 			<img class="img-responsive" src="https://i.imgur.com/gN3jfB1.png" onclick="showSearch()" style="height:20px;">
-			<input type="text" placeholder="Search for Bhajan" style="text-align:center;height:40px; width:70%;font-size:23px;">
-			<img class="img-responsive" src="https://i.imgur.com/NgZcVuz.png" onclick="" style="height:20px;">
-		</form>
+			<input id="search_field" placeholder="Search for Bhajan" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search for Bhajan'" type="text" style="text-align:center;height:40px; width:70%;font-size:23px;">
+			<img id="search_icon" class="img-responsive" src="https://i.imgur.com/NgZcVuz.png" onclick="showSearchBhajans('bhajan','search_field')" style="height:23px;">
+		</div>
 	</div>
 
  <div id="TFTD_card">
@@ -105,7 +104,8 @@
   <div id="bhajans_card" class="col-sm-9 w3-animate-opacity">
     <div class="row">
       <div class="" style="padding-left:10px">
-        <b><h5 id="bhajans_list_title" class="card-title" style="font-weight:bold;font-size:150%; text-align:center"></h5></b>
+        <div id="bhajans_list_title" class="card-title" style="font-weight:bold;font-size:150%; text-align:center"></div>
+        
         	<div class="container" style="padding:10px 20px;">
         			<div style="overflow:scroll; height:400px; overflow-x:hidden;overflow-y: scroll; /* has to be scroll, not auto */
   -webkit-overflow-scrolling: touch;">
@@ -201,4 +201,8 @@
   </footer>
   <!-- Footer -->
 </body>
+
+<script src="BhajanBook.js"></script>
+<script src="BhajanBookPaging.js"></script>
+
 </html>

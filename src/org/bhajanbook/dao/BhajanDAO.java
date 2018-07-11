@@ -126,7 +126,41 @@ public class BhajanDAO {
 			}
 		}
 	}
+	public List<BhajanTitleVO> searchBhajan(String searchStr) {
+		Connection conn = null;
+		ArrayList<BhajanTitleVO> bhajanTitleList = new ArrayList<BhajanTitleVO>();
+		try {
+			// Get DB Connection.
+			conn = DBConnection.getDBConnection();
+			Statement stmt = conn.createStatement();
+			StringBuffer queryStr = new StringBuffer();
+			queryStr.append("select b.bhajan_id, bhajan_title  from bhajandb.bhajan b ");  			
+			queryStr.append("where title_key like '");
+			queryStr.append(searchStr.toUpperCase().trim() + "%'");
+System.out.println(queryStr);
+			ResultSet rs = stmt.executeQuery(queryStr.toString());
 
+			while (rs.next()) {
+				BhajanTitleVO btVO = new BhajanTitleVO();
+				btVO.setId(rs.getInt("bhajan_id"));
+				btVO.setBhajanTitle(rs.getString("bhajan_title"));
+				bhajanTitleList.add(btVO);
+			}
+			return bhajanTitleList;
+		} catch (Exception e) {
+			// TODO: report error to support.
+			// Return empty list.			
+			return bhajanTitleList;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					// do nothing.
+				}
+			}
+		}
+	}
 	public static void main(String[] args) {
 		BhajanDAO bDAO = new BhajanDAO();
 		try {

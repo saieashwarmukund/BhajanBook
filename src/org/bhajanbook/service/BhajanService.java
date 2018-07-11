@@ -32,8 +32,9 @@ public class BhajanService  {
  	   List<BhajanTitleVO> bhajanList = bhajanDAO.getBhajanTitleList(deity);
  	   return bhajanList;
     }  
+    
     @GET
-    @Path("/show") 
+    @Path("/Show") 
     @Produces(MediaType.APPLICATION_JSON)
     public BhajanLyricsVO getBhajan(@Context HttpHeaders headers, @Context HttpServletRequest request,  @QueryParam("id") String id) {
  	   BhajanDAO bhajanDAO = new BhajanDAO();
@@ -47,5 +48,23 @@ public class BhajanService  {
  	   bhajanDAO.logBhajanAccess(id, userAgent, ip);
  	   return bhajanVO;
     }
+    
+    
+    @GET
+    @Path("/Search") 
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<BhajanTitleVO> searchBhajan(@Context HttpHeaders headers, @Context HttpServletRequest request,  @QueryParam("searchstr") String searchStr) {
+ 	   BhajanDAO bhajanDAO = new BhajanDAO();
+ 	   List<String> userAgentList = headers.getRequestHeader("User-Agent");
+ 	   String userAgent = "";
+ 	   if (userAgentList != null) {
+ 		   userAgent = userAgentList.get(0);
+ 	   }
+ 	   String ip = request.getRemoteAddr();
+ 	   List<BhajanTitleVO> bhajanVOlist = bhajanDAO.searchBhajan(searchStr);
+ 	   //bhajanDAO.logBhajanAccess(id, userAgent, ip);
+ 	   return bhajanVOlist;
+    }
+    
 
 }
