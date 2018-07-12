@@ -126,11 +126,43 @@ public class BhajanDAO {
 			}
 		}
 	}
+ 
+	public int logBhajanSearch(String searchStr, String userId, String userAgent, String ip, int hits ) {
+		Connection conn = null;
+		StringBuffer queryStr = null;
+		try {
+			// Get DB Connection.
+			conn = DBConnection.getDBConnection();
+			conn.setAutoCommit(false);
+			Statement stmt = conn.createStatement();
+		    queryStr = new StringBuffer("insert into log_bhajan_search ");
+			queryStr.append("(search_str, date_searched, user_agent, remote_addr, user_id, result_hits)");
+			queryStr.append("values ('" + searchStr  + "', now(), '" + userAgent + "', '" + ip + "',null, " + hits + ")");
+System.out.println(queryStr);
+			int rc = stmt.executeUpdate(queryStr.toString());
+			conn.commit();
+			return rc;
+		} catch (Exception e) {
+			// TODO: report error to support.
+			try {conn.rollback();} catch (Exception e2) {};
+			System.out.println("Exception occured: " + e.toString() + " " + queryStr);
+			return 0;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					// do nothing.
+				}
+			}
+		}
+	}
 	public List<BhajanTitleVO> searchBhajan(String searchStr) {
 		Connection conn = null;
 		ArrayList<BhajanTitleVO> bhajanTitleList = new ArrayList<BhajanTitleVO>();
 		try {
-			// Get DB Connection.
+			searchStr = searchStr.replaceAll("'", "''");
+			// Get DB Connection. 
 			conn = DBConnection.getDBConnection();
 			Statement stmt = conn.createStatement();
 			StringBuffer queryStr = new StringBuffer();
@@ -146,7 +178,12 @@ System.out.println(queryStr);
 				btVO.setBhajanTitle(rs.getString("bhajan_title"));
 				bhajanTitleList.add(btVO);
 			}
-			return bhajanTitleList;
+			if (bhajanTitleList.size() > 0 || searchStr.length() <= 3) {
+				return bhajanTitleList;				
+			}
+			// searchStr = searchStr.substring(0, searchStr.length() - 1);
+			searchStr = searchStr.substring(0, 3);
+			return searchBhajan(searchStr);
 		} catch (Exception e) {
 			// TODO: report error to support.
 			// Return empty list.			
