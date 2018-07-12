@@ -55,6 +55,8 @@ public class BhajanService  {
     @Produces(MediaType.APPLICATION_JSON)
     public List<BhajanTitleVO> searchBhajan(@Context HttpHeaders headers, @Context HttpServletRequest request,  @QueryParam("searchstr") String searchStr) {
  	   BhajanDAO bhajanDAO = new BhajanDAO();
+ 	   String userId = ""; // For later.
+
  	   List<String> userAgentList = headers.getRequestHeader("User-Agent");
  	   String userAgent = "";
  	   if (userAgentList != null) {
@@ -62,7 +64,7 @@ public class BhajanService  {
  	   }
  	   String ip = request.getRemoteAddr();
  	   List<BhajanTitleVO> bhajanVOlist = bhajanDAO.searchBhajan(searchStr);
- 	   //bhajanDAO.logBhajanAccess(id, userAgent, ip);
+ 	   bhajanDAO.logBhajanSearch(searchStr, userId, userAgent, ip, bhajanVOlist.size());
  	   return bhajanVOlist;
     }
     

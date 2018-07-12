@@ -199,11 +199,13 @@ $(document).ready(function() {
 });
 
 
-function showSearch() {
+function showSearchDiv() {
 	var nav = document.getElementById("nav");
 	var search = document.getElementById("search_bar");
 	nav.style.display = (nav.style.display == "none" ? "block" : "none");
 	search.style.display = (search.style.display == "none" ? "block" : "none");
+	document.getElementById("search_field").value = "";
+	document.getElementById("search_field").placeholder = "Search for Bhajan";
 	document.getElementById("search_field").focus();
 }
 
