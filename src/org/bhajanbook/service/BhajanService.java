@@ -63,8 +63,7 @@ public class BhajanService  {
  		   userAgent = userAgentList.get(0);
  	   }
  	   String ip = request.getRemoteAddr();
- 	   List<BhajanTitleVO> bhajanVOlist = bhajanDAO.searchBhajan(searchStr);
- 	   bhajanDAO.logBhajanSearch(searchStr, userId, userAgent, ip, bhajanVOlist.size());
+ 	   List<BhajanTitleVO> bhajanVOlist = bhajanDAO.searchBhajan(searchStr, userId, userAgent, ip, true);
  	   return bhajanVOlist;
     }
     

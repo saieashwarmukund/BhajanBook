@@ -16,10 +16,12 @@ var SHIVA_IMAGE = "/BhajanBook/images/deities/shiva.jpg";
 var SUBRAMANYA_IMAGE = "/BhajanBook/images/deities/subramanya.jpg";
 var VITTHALA_IMAGE = "/BhajanBook/images/deities/vitthala.jpg";
 var SEARCH_IMAGE = "/BhajanBook/images/deities/search.jpg"
+var CONTACT_IMAGE = "/BhajanBook/images/deities/contact.jpg"
 
 var deities_dict = {
 	"ALL" : ALL_IMAGE,
 	"DEVI" : DEVI_IMAGE,
+	"CONTACT" : CONTACT_IMAGE,
 	"EASHWARAMBA" : EASHWARAMBA_IMAGE,
 	"ENGLISH" : ENGLISH_IMAGE,
 	"GANESHA" : GANESHA_IMAGE,
@@ -40,6 +42,7 @@ var deities_dict = {
 $(document).ready(function() {
 	hideCard("main_panel");
 	hideCard("search_bar");
+	hideCard("contact_card");
 	$.ajax({
 		url : "/BhajanBook/rest/ThoughtForTheDay"
 	}).then(function(data) {
@@ -66,6 +69,23 @@ function showDeityBhajans(deity) {
 	showBhajanPages(deity);
 }
 
+
+function showMainPage() {
+	hideCard("lyrics_card");
+	showCard("TFTD_card");
+	hideCard("main_panel");
+	hideCard("bhajans_card")
+}
+
+function showContact() {
+	hideCard("lyrics_card");
+	hideCard("TFTD_card");
+	hideCard("main_panel");
+	hideCard("bhajans_card");
+	showCard("contact_card");
+	showDeityPic("CONTACT");
+}
+
 function showSearchBhajans(category, field_id) {
 	var search_string = document.getElementById(field_id).value;
 	hideCard("lyrics_card");
@@ -77,6 +97,7 @@ function showSearchBhajans(category, field_id) {
 	document.getElementById(field_id).value = "";
 	document.getElementById(field_id).placeholder = "Search for Bhajan";
 }
+
 
 function showDeityPic(deity) {
 	var el = document.getElementById("deity_image");
@@ -277,3 +298,16 @@ input.addEventListener("keyup", function(event) {
 		showSearchBhajans('bhajan','search_field');
   }
 });
+
+
+function showForm(){
+	var selopt = document.getElementById("opts").value;
+	if (selopt == 1) {
+	document.getElementById("feedback").style.display="block";
+	document.getElementById("suggestions").style.display="none";
+	}
+	if (selopt == 2) {
+	document.getElementById("suggestions").style.display="block";
+	document.getElementById("feedback").style.display="none";
+	}
+	}
