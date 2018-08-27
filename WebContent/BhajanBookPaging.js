@@ -61,6 +61,14 @@ function showBhajanPages(deity) {
 			$('#bhajan_list_page').append(tr);
 		}
 	}
+	function append_table() {
+		var tr;
+		for (var i = 0; i < displayRecords.length; i++) {
+			tr = $('<tr/>');
+			tr.append("<td onclick='showBhajanLyrics(" + displayRecords[i].id + ")'>" + displayRecords[i].bhajanTitle  + "</td>");
+			$('#bhajan_list_page').append(tr);
+		}
+	}
 
 	function apply_pagination() {
 		$pagination.twbsPagination({
