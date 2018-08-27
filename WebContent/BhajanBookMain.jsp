@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@page import="org.bhajanbook.service.UserRoleVO"%>
+<%@page import="org.bhajanbook.service.SessionManager"%>
+<%@page import="org.bhajanbook.util.BhajanBookConstants"%>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,6 +23,50 @@
 <title>BhajanBook</title>
 
 </head>
+<%
+if(null == session.getAttribute("BHAJAN_BOOK_USER")){
+    Cookie cookie = null;
+    Cookie[] cookies = null;
+    
+    // Get an array of Cookies associated with the this domain
+    cookies = request.getCookies();
+    
+    boolean cookieFound = false;
+    String secKey = "";
+    if( cookies != null ) {
+       for (int i = 0; i < cookies.length; i++) {
+          cookie = cookies[i];
+          if (cookie.getName().equals(BhajanBookConstants.COOKIE_USER)) {
+             cookieFound = true;
+             System.out.print("Value: " + cookie.getValue()+" <br/>");
+             break;
+          }
+       }
+    }
+    
+    if (cookieFound) {
+        secKey = cookie.getValue();
+		SessionManager sesMgr = new SessionManager();
+		UserRoleVO userVO = sesMgr.getRememberedUser(secKey);
+		if (userVO == null) {
+		    RequestDispatcher rd = request.getRequestDispatcher("LOGIN"); 
+			rd.forward(request,  response);
+			return;			
+		}
+		sesMgr.createSession(request, response, "N", userVO);
+		RequestDispatcher rd = request.getRequestDispatcher("MAIN"); 
+		rd.forward(request,  response);
+		return;  			 
+    }
+    
+    System.out.println("No cookie found.");
+    RequestDispatcher rd = request.getRequestDispatcher("LOGIN"); 
+	rd.forward(request,  response);
+	return;
+}
+
+
+%>
 
 <body class="Site">
 <div class="Site-content">
@@ -40,6 +87,40 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/BhajanBook/">Home</a>
                 </li>
+                <!--<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">Login</a>
+						<ul id="login-dp" class="dropdown-menu">
+							<li>
+								 <div class="row">
+										<div class="col-md-12">
+											 <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+													<div class="form-group">
+														 <label class="sr-only" for="exampleInputEmail2">Email address</label>
+														 <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email address" required>
+													</div>
+													<div class="form-group">
+														 <label class="sr-only" for="exampleInputPassword2">Password</label>
+														 <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" required>
+			                                             <div class="help-block text-right"><a href="">Forget your password ?</a></div>
+													</div>
+													<div class="form-group">
+														 <button type="submit" class="btn btn-dark btn-block">Sign in</button>
+													</div>
+													
+													<div class="checkbox">
+														 <label>
+														 <input type="checkbox"> Remember Me
+														 </label>
+													</div>
+											 </form>
+										</div>
+										<div class="bottom text-center">
+											New here? <a href="#"><b>Register Here</b></a>
+										</div>
+								 </div>
+							</li>
+						</ul>
+			        </li> -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">Bhajans</a>
                 	<div class="dropdown-menu text-center text-lg-left" style="border:0px;">
@@ -61,8 +142,12 @@
                 		<a class="dropdown-item" onclick="showDeityBhajans('Vitthala')" data-toggle="collapse" data-target=".navbar-collapse.show">Vitthala</a>
                 	</div>
                 </li>
+                                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">Account</a>
+                	<div class="dropdown-menu text-center text-lg-left" style="border:0px;">
+                		<a class="dropdown-item" onclick="showPlaylistMenu()" data-toggle="collapse" data-target=".navbar-collapse.show">Playlists</a>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showContact()">Contact</a>
+                    <a class="nav-link" href="#" onclick="logout()">Log Out</a>
                 </li>
             </ul>
         </div>
@@ -90,7 +175,7 @@
  
  
  
-<div id="main_panel" class="w3-animate-opacity">
+<div id="main_panel" class="center-block w3-animate-opacity">
 <div class="row">
   <div id="deity_card" class="col-sm-3 w-50 fade-in">
     <div class="row">
@@ -105,17 +190,31 @@
     <div class="row">
       <div class="" style="padding-left:10px">
         <div id="bhajans_list_title" class="card-title" style="font-weight:bold;font-size:150%; text-align:center"></div>
-        
+        <div class="subhead" id="subhead"></div>
         	<div class="container" style="padding:10px 20px;">
         			<div style="overflow:scroll; height:400px; overflow-x:hidden;overflow-y: scroll; /* has to be scroll, not auto */
   -webkit-overflow-scrolling: touch;">
-						<table id="bhajan_table" class="table table table-hover" cellspacing="0" width="100%">
+						<table id="bhajan_table" class="table table table-hover flex-column" cellspacing="0" width="100%">
 						<colgroup><col width="100%"></colgroup>
 						<tbody id="bhajan_list_page"></tbody>
 						</table>
 					</div>
 			</div>
 	</div>
+
+	<div class="col-sm-12 col-md-4" id="playlist_options" style="display:none">
+        <h5 class="mt-4" style="font-weight:bold;"> Options</h5>
+        <ul class="nav flex-column nav-pills" style=";">
+            <li class="nav-item" >
+                <a class="nav-link" href="#">Clear playlist</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Delete playlist</a>
+            </li>
+        </ul>
+    </div>
+    
+    
 </div>
 </div>
 
@@ -125,9 +224,47 @@
         <u><h5 class="card-title" id="bhajan_title" style="font-size:150%"></h5></u>
         <pre class="card-text" id="bhajan_lyrics" style="font-family:arial; font-size:100%"></pre>
         <div id="bhajan_audio"></div>
-        <div id="bhajan_meaning"></div>
-        <div id="bhajan_raaga"></div>
-        <div id="bhajan_beat"></div>
+        <div class="center col-md-3">
+        	<div class="playlist_class" id="favorite" style="position: relative; top:6px; left:-15px"></div>
+        	<div class="playlist_class" id="add_to_playlist" style="position: relative; left:4vh"></div>
+        	
+			<!-- Playlist Modal -->
+			  <div class="modal fade" id="playlistModal" role="dialog">
+			    <div class="modal-dialog">
+			    
+			      <!-- Add to Playlist Modal content-->
+			      <div class="modal-content">
+			        <div class="modal-header">
+			          <h4 class="modal-title">Add to Playlist</h4>
+			          <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        </div>
+			        <div class="modal-body text-left" id="playlist_add_checklist" style="overflow-y: scroll; max-height:150px;">
+						<form onSubmit="return false;" >
+						  <div id="playlist_checkbox">
+						  </div>
+						  <div id="create_playlist_section" style="display:none">
+  			              <input id="new_playlist_name" type="text" minlength="3" maxlength="30"  placeholder="Enter playlist name" style="padding-left:10px;" required/>
+  			              </div>						  
+						  <input type="submit" value="Create" id="submit_playlist_new" onclick="createPlaylist('new_playlist_name')" data-dismiss="modal">
+						</form>
+			        </div>
+			        <div class="modal-footer">
+			          <div id="create_playlist_hdr">
+			          <button id="create_playlist_btn" type="button" class="btn btn-default" data-toggle="modal" 
+			             onclick="toggleDiv('playlist_checkbox'); showSection('submit_playlist_new'); toggleDiv('create_playlist_section'); hideSection('create_playlist_hdr')">
+			             Create New Playlist</button>
+			          </div>
+			        </div>
+			      </div> 
+			    </div>
+			  </div>
+  
+        </div>
+        <br>
+        <div id="bhajan_meaning" class="col-md-9"></div>
+        <div id="bhajan_raaga" class="col-md-9"></div>
+        <div id="bhajan_beat" class="col-md-9"></div>
+        <div id="bhajan_id_div"></div>
         <a  onclick="goBackToBhajans()" class="btn btn-light">Back</a>
       </div>
   </div>
@@ -167,15 +304,11 @@
                                 <option value="2">Bhajan Suggestions</option>
                             </select>
                         </div>
-                        <div class="col-md-12">
-                        <button type="submit" class="btn btn-light pull-left" id="btnContactUs">
-                            Submit</button>
-                    </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                         
-                            <div id = "feedback" style="display:none">
+                            <div id = "feedback" style="display:block">
 							<form name= "feedf">
 		                        <div class="form-group">
 		                            <label for="name">
@@ -190,29 +323,35 @@
 
 							<div id = "suggestions" style="display:none">
 							<form name= "suggf">
-							  Bhajan Title:<br>
-							  <input type="text" name="Title">
+							<br>
+							  <text style="color:red">* Required</text><br><br>
+							  <text>Bhajan Title <text style="color:red">*</text></text>
+							  <input type="text" name="Title"  required="required">
 							  <br><br>
-							  Lyrics:<br>
+							  <text>Lyrics <text style="color:red">*</text></text>
+							  <input type="text" name="Lyrics"  required="required">
+							  <br><br>
+							  <text>Audio Link</text>
 							  <input type="text" name="Lyrics">
 							  <br><br>
-							  Audio Link:<br>
+							  <text>Meaning</text>
 							  <input type="text" name="Lyrics">
 							  <br><br>
-							  Meaning:<br>
+							  <text>Raaga</text>
 							  <input type="text" name="Lyrics">
 							  <br><br>
-							  Raaga:<br>
+							  <text>Beat</text>
 							  <input type="text" name="Lyrics">
 							  <br><br>
-							  Beat:<br>
-							  <input type="text" name="Lyrics">
-							  <br><br>
+							  
 							</form> 
 							</div>
 
                     </div>
-           
+                    <div class="col-md-12 center-block">
+                        <button type="submit" class="btn btn-light pull-right" id="btnContactUs">
+                            Submit</button>
+                    </div>
                 </div>
                 </form>
             </div>
@@ -222,6 +361,21 @@
     </div>
 </div>
 </div>
+
+
+<div id="analytics_card">
+<div class="card-body col-md-12 text-center text-md-left p-2">
+        <u><h5 class="card-title" id="bhajan_title" style="font-size:150%"></h5></u>
+        <pre class="card-text" id="bhajan_lyrics" style="font-family:arial; font-size:100%"></pre>
+        <div id="bhajan_audio"></div>
+        <div id="bhajan_meaning"></div>
+        <div id="bhajan_raaga"></div>
+        <div id="bhajan_beat"></div>
+        <a  onclick="goBackToBhajans()" class="btn btn-light">Back</a>
+      </div>
+</div>
+
+
 </div>
 
 <div class="row w3-animate-opacity" style="padding-top:25px">
@@ -257,33 +411,14 @@
 
       <!-- Social buttons -->
       <ul class="list-unstyled list-inline text-center">
-        <li class="list-inline-item">
-          <a class="btn-floating btn-fb mx-1">
-            <i class="fa fa-facebook"> </i>
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a class="btn-floating btn-tw mx-1">
-            <i class="fa fa-twitter"> </i>
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a class="btn-floating btn-gplus mx-1">
-            <i class="fa fa-google-plus"> </i>
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a class="btn-floating btn-li mx-1">
-            <i class="fa fa-linkedin"> </i>
-          </a>
-        </li>
+        <a class="" href="#" onclick="showContact()">Contact</a><br>
       </ul>
       <!-- Social buttons -->
 
     </div>
     <!-- Footer Elements -->
     <!-- Copyright -->
-    <div class="footer-copyright text-center py-3 copyright-bg no-hover">© 2018 Copyright:
+    <div class="footer-copyright text-center py-3 copyright-bg no-hover">
       <a href="/BhajanBook">www.saibhajanbook.org</a><br>
       <a href="mailto:saibhajanbookapp@gmail.com">saibhajanbookapp@gmail.com</a>
     </div>
@@ -294,5 +429,6 @@
 
 <script src="BhajanBook.js"></script>
 <script src="BhajanBookPaging.js"></script>
+<script src="login.js"></script>
 
 </html>
