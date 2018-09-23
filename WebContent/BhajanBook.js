@@ -1,6 +1,6 @@
 
 var ALL_IMAGE = "/BhajanBook/images/deities/all.jpg"
-	var DEVI_IMAGE = "/BhajanBook/images/deities/devi.jpg";
+var DEVI_IMAGE = "/BhajanBook/images/deities/devi.jpg";
 var EASHWARAMBA_IMAGE = "/BhajanBook/images/deities/eashwaramba.jpg";
 var ENGLISH_IMAGE = "/BhajanBook/images/deities/english.jpg";
 var GANESHA_IMAGE = "/BhajanBook/images/deities/ganesha.jpg";
@@ -859,11 +859,11 @@ function logout() {
 
 function showForm(){
 	var selopt = document.getElementById("opts").value;
-	if (selopt == 1) {
+	if (selopt == "feedback") {
 		document.getElementById("feedback").style.display="block";
 		document.getElementById("suggestions").style.display="none";
 	}
-	if (selopt == 2) {
+	if (selopt == "bhajan_sugg") {
 		document.getElementById("suggestions").style.display="block";
 		document.getElementById("feedback").style.display="none";
 	}
