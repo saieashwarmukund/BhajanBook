@@ -32,9 +32,13 @@
   <div id="inviteContainer">
     <div class="logoContainer"><img class="logo" src="images/sai_icon.png"/><img class="text" src="images/BhajanBook_logo_text.png"/></div>
     <div class="acceptContainer">
+    
+    
+    
+    
       <form onSubmit="return false;">
-        <h1 style="font-size: 36px">Sai Ram</h1>
-        <div class="formContainer">
+        <h1 style="font-size: 36px">Sai Ram</h1>        
+        <div class="formContainer" id="loginForm">
           <div class="formDiv" style="transition-delay: 0.2s;">
             <input id="userId" type="text" required="" placeholder="EMAIL" style="padding-left:10px;"/>
           </div>
@@ -45,9 +49,41 @@
 			  </div>
           </div>
 		  <div class="formDiv" style="transition-delay: 0.6s;">
-            <button class="acceptBtn" type="submit" style="font-family: 'Montserrat' !important" onclick="login()">LOGIN</button><span class="register">Need an account?<a href="#" style="font-family: 'Montserrat' !important;">Register</a></span>
+            <button class="acceptBtn" type="submit" style="font-family: 'Montserrat' !important" onclick="login()">LOGIN</button>
+            <span class="register">Need an account?<a href="#/" onclick="showRegisterForm()" style="font-family: 'Montserrat' !important;">Register</a></span>
           </div>
         </div>
+        
+        
+        
+        
+        <div class="formContainer" id="registerForm">
+          <div class="formDiv" style="transition-delay: 0.2s;">
+            <div class="input-group">
+	            <input id="firstName" class="form-control" type="text" required placeholder="FIRST NAME" style="padding-left:10px;"/>
+	            <input id="lastName" class="form-control" type="text" required placeholder="LAST NAME" style="padding-left:10px;"/>
+            </div>
+          </div>
+          <div class="formDiv" style="transition-delay: 0.4s;">
+	          	<input id="rEmail" class="form-control" type="email" required placeholder="EMAIL" style="padding-left:10px;"/>
+	          	<div class="input-group">
+	            <input id="rPasswd" class="form-control" type="password" required placeholder="PASSWORD" style="padding-left:10px;"/>
+	            <input id="rConfirmPasswd" class="form-control" type="password" required placeholder="CONFIRM PASSWORD" style="padding-left:10px;"/>
+	          	<span class="input-group-addon eye">
+		            <a id="icon" onmouseover="mouseoverPass();" onmouseout="mouseoutPass();" style="color: white;">
+	          		<i class="fa fa-eye" aria-hidden="true" ></i></a>
+	          	</span>
+	          </div>
+          </div>
+		  <div class="formDiv" style="transition-delay: 0.6s; top:9px;" >
+            <button class="acceptBtn" type="submit" style="font-family: 'Montserrat' !important" onclick="registerAccount()">REGISTER ACCOUNT</button>
+            <span class="register">Have an account?<a href="#/" onclick="showLoginForm()" style="font-family: 'Montserrat' !important;">Sign in instead</a></span>
+          </div>
+        </div>
+        
+        
+
+        
       </form>
     </div>
   </div>

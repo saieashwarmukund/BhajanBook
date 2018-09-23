@@ -18,7 +18,8 @@ public class BhajanBookProps {
 			propMap.put("DATABASE_HOST", prop.getProperty("DATABASE_HOST"));
 			propMap.put("DATABASE", prop.getProperty("DATABASE"));
 			propMap.put("DBUSER", prop.getProperty("DBUSER"));
-			propMap.put("DBPASSWORD", prop.getProperty("DBPASSWORD"));			
+			propMap.put("DBPASSWORD", prop.getProperty("DBPASSWORD"));		
+			propMap.put("ADMIN_EMAIL", prop.getProperty("ADMIN_EMAIL"));
 		} catch(IOException ex) {
 			ex.printStackTrace();
 		}

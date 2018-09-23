@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.WordUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bhajanbook.db.DBConnection;
@@ -103,6 +104,50 @@ public class BhajanDAO {
 		}
 	}
 
+	public BaseVO clearPlaylist(String userId, String playlistKey) {
+		Connection conn = null;
+		StringBuffer queryStr = null;
+		BaseVO retVO = new BaseVO();
+		try {
+			// Get DB Connection.
+			conn = DBConnection.getDBConnection();
+			conn.setAutoCommit(false);
+			playlistKey = playlistKey.replaceAll("'", "''");
+
+			Statement stmt = conn.createStatement();
+			queryStr = new StringBuffer("delete from playlist_bhajan \r\n" );
+			queryStr.append("where playlist_key = " + playlistKey);
+			
+			int rc = stmt.executeUpdate(queryStr.toString(), Statement.RETURN_GENERATED_KEYS);
+			conn.commit();
+			
+			return retVO;
+		} catch (Exception e) {
+			// TODO: report error to support.
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
+			;
+			logger.error("Exception occured: " + e.toString() + " " + queryStr);
+			retVO.setStatus(BhajanBookConstants.FAILURE);
+			retVO.setMesg("Internal Error occured. Please contact support.");
+
+			return retVO;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					// do nothing.
+				}
+			}
+		}
+	}
+	
+	
+	
+
 	public BaseVO createPlaylist(String userId, String playlistName, String id) {
 		Connection conn = null;
 		StringBuffer queryStr = null;
@@ -161,6 +206,66 @@ public class BhajanDAO {
 			}
 		}
 	}
+	
+	public BaseVO deletePlaylist(String userId, String playlistKey) {
+		Connection conn = null;
+		StringBuffer queryStr = null;
+		BaseVO retVO = new BaseVO();
+		try {
+			// Get DB Connection.
+			conn = DBConnection.getDBConnection();
+			conn.setAutoCommit(false);
+			playlistKey = playlistKey.replaceAll("'", "''");
+
+			
+			Statement stmt = conn.createStatement();
+			queryStr = new StringBuffer("select owner_user_id from playlist where playlist_key = " + playlistKey);
+			ResultSet rs = stmt.executeQuery(queryStr.toString());
+			if (rs.next()) {
+				// Playlist present. Check user is the owner.
+				String ownerUserId = rs.getString("owner_user_id");
+				if (!userId.equals(ownerUserId)) {
+					throw new Exception("Delete Access Denied.");
+				} 
+			} else {
+				// No rows returned. PlaylistKey not present. return error.
+				throw new Exception("Error, playlist not found.");
+			}
+			queryStr = new StringBuffer("delete from playlist_bhajan where playlist_key = " + playlistKey);
+			stmt.executeUpdate(queryStr.toString(), Statement.RETURN_GENERATED_KEYS);
+
+			queryStr = new StringBuffer("delete from playlist where playlist_key = " + playlistKey + " and owner_user_id = '" + userId + "'");
+			stmt.executeUpdate(queryStr.toString(), Statement.RETURN_GENERATED_KEYS);
+			
+			queryStr = new StringBuffer("delete from playlist_shared where playlist_key = " + playlistKey);
+			stmt.executeUpdate(queryStr.toString(), Statement.RETURN_GENERATED_KEYS);
+
+			conn.commit();
+			
+			return retVO;
+		} catch (Exception e) {
+			// TODO: report error to support.
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
+			;
+			logger.error("Exception occured: " + e.toString() + " " + queryStr);
+			retVO.setStatus(BhajanBookConstants.FAILURE);
+			retVO.setMesg("Internal Error occured. Please contact support.");
+
+			return retVO;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					// do nothing.
+				}
+			}
+		}
+	}
+
 
 	public BhajanLyricsVO getBhajan(String userId, String bhajanId) {
 		Connection conn = null;
@@ -171,7 +276,7 @@ public class BhajanDAO {
 			conn = DBConnection.getDBConnection();
 			Statement stmt = conn.createStatement();
 			StringBuffer queryStr = new StringBuffer("select b.bhajan_id, bhajan_title, meaning, lyrics ");
-			queryStr.append(", lang, raaga, beat, audio_file_path from bhajandb.bhajan b ");
+			queryStr.append(", lang, raaga, beat, shruthi, audio_file_path from bhajandb.bhajan b ");
 			queryStr.append("  where b.bhajan_id = ");
 			queryStr.append(id);
 
@@ -180,8 +285,8 @@ public class BhajanDAO {
 				// Set values to BhajanVO.
 				bhajanVO.setId(rs.getInt("bhajan_id"));
 				bhajanVO.setBhajanTitle(rs.getString("bhajan_title"));
-				bhajanVO.setLyrics(rs.getString("lyrics"));
 				bhajanVO.setMeaning(rs.getString("meaning"));
+				bhajanVO.setShruti(rs.getString("shruthi"));
 				bhajanVO.setLang(rs.getString("lang"));
 				bhajanVO.setRaaga(rs.getString("raaga"));
 				bhajanVO.setBeat(rs.getString("beat"));
@@ -194,6 +299,16 @@ public class BhajanDAO {
 				} else {
 					bhajanVO.setFavorite("N");
 				}
+				String lyrics = rs.getString("lyrics");
+				String[] lines = lyrics.split("\\r?\\n");
+				StringBuffer lyricsSplit = new StringBuffer();
+		        for (String line : lines) {
+		    		lyricsSplit.append(WordUtils.wrap(line, 47, "\r\n", false));
+		    		lyricsSplit.append("\r\n");
+		        }
+		        
+				// System.out.println(lyricsSplit);
+				bhajanVO.setLyrics(lyricsSplit.toString());
 
 			} else {
 				bhajanVO.setBhajanTitle("Error Fetching Bhajan. Please contact support");
@@ -292,7 +407,7 @@ public class BhajanDAO {
 				BhajanTitleVO btVO = new BhajanTitleVO();
 				btVO.setId(rs.getInt("bhajan_id"));
 				btVO.setBhajanTitle(rs.getString("bhajan_title"));
-				// To add shruthi
+				btVO.setShruti(rs.getString("shruthi"));
 				bhajanTitleList.add(btVO);
 			}
 			return bhajanTitleList;
@@ -386,7 +501,7 @@ public class BhajanDAO {
 		}
 	}
 
-	public int logBhajanAccess(String id, String userAgent, String ip) {
+	public int logBhajanAccess(String id, String userId, String userAgent, String ip) {
 		Connection conn = null;
 		StringBuffer queryStr = null;
 		try {
@@ -395,8 +510,8 @@ public class BhajanDAO {
 			conn.setAutoCommit(false);
 			Statement stmt = conn.createStatement();
 			queryStr = new StringBuffer("insert into log_bhajan_access ");
-			queryStr.append("(bhajan_id, date_accessed, user_agent, remote_addr)");
-			queryStr.append("values (" + id + ", now(), '" + userAgent + "', '" + ip + "')");
+			queryStr.append("(bhajan_id, user_id, date_accessed, user_agent, remote_addr)");
+			queryStr.append(" values (" + id + ", '" + userId + "', now(), '" + userAgent + "', '" + ip + "')");
 
 			int rc = stmt.executeUpdate(queryStr.toString());
 			conn.commit();
@@ -431,8 +546,8 @@ public class BhajanDAO {
 			Statement stmt = conn.createStatement();
 			queryStr = new StringBuffer("insert into log_bhajan_search ");
 			queryStr.append("(search_str, date_searched, user_agent, remote_addr, user_id, search_mech, result_hits)");
-			queryStr.append("values ('" + searchStr + "', now(), '" + userAgent + "', '" + ip + "',null, " + searchMech
-					+ ", " + hits + ")");
+			queryStr.append("values ('" + searchStr + "', now(), '" + userAgent + "', '" + ip + "', '" + userId + "', "
+					+ searchMech + ", " + hits + ")");
 
 			logger.debug(queryStr);
 
@@ -592,6 +707,62 @@ public class BhajanDAO {
 			}
 		}
 	}
+	
+	public BaseVO renamePlaylist(String userId, String playlistKey, String newPlaylistName) {
+		Connection conn = null;
+		StringBuffer queryStr = null;
+		BaseVO retVO = new BaseVO();
+		try {
+			// Get DB Connection.
+			conn = DBConnection.getDBConnection();
+			conn.setAutoCommit(false);
+			playlistKey = playlistKey.replaceAll("'", "''");
+			newPlaylistName = newPlaylistName.replaceAll("'", "''");
+			
+			Statement stmt = conn.createStatement();
+			queryStr = new StringBuffer("select owner_user_id from playlist where playlist_key = " + playlistKey);
+			ResultSet rs = stmt.executeQuery(queryStr.toString());
+			if (rs.next()) {
+				// Playlist present. Check user is the owner.
+				String ownerUserId = rs.getString("owner_user_id");
+				if (!userId.equals(ownerUserId)) {
+					throw new Exception("Delete Access Denied.");
+				} 
+			} else {
+				// No rows returned. PlaylistKey not present. return error.
+				throw new Exception("Error, playlist not found.");
+			}
+			
+			queryStr = new StringBuffer("update playlist set playlist_name = '" + newPlaylistName 
+					+ "' where playlist_key = " + playlistKey + " and owner_user_id = '" + userId + "'");
+			stmt.executeUpdate(queryStr.toString(), Statement.RETURN_GENERATED_KEYS);
+			
+			conn.commit();
+			retVO.setStatus(BhajanBookConstants.SUCCESS);			
+			return retVO;
+			
+		} catch (Exception e) {
+			// TODO: report error to support.
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
+			;
+			logger.error("Exception occured: " + e.toString() + " " + queryStr);
+			retVO.setStatus(BhajanBookConstants.FAILURE);
+			retVO.setMesg("Internal Error occured. Please contact support.");
+
+			return retVO;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					// do nothing.
+				}
+			}
+		}
+	}
 
 	public List<BhajanTitleVO> searchBhajan(String searchStr, String userId, String userAgent, String ip,
 			boolean firstTime) {
@@ -700,4 +871,6 @@ public class BhajanDAO {
 			}
 		}
 	}
+	
+	
 }

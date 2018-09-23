@@ -1,8 +1,8 @@
 body, html {
 	background-color:white;
+	  background-image: url("https://i.imgur.com/g2nXBAx.jpg");
   height: 100%;
   text-align:center;
-  background-image: url("https://i.imgur.com/g2nXBAx.jpg");
   background-repeat-x: no-repeat;
   background-size:100% 100vh;
   -webkit-background-size: cover;
@@ -341,3 +341,53 @@ input {
     text-align: center;
 }
 
+
+body { 
+  background-color: #f5f5f5;
+}
+
+.form-group {
+  position:relative;  
+
+  & + .form-group {
+    margin-top: 30px;
+  }
+}
+
+.form-label {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  color: #999;
+  background-color: #fff;
+  z-index: 10;
+  transition: transform 150ms ease-out, font-size 150ms ease-out;
+}
+
+.focused .form-label {
+  transform: translateY(-125%);
+  font-size: .75em;
+}
+
+.form-input {
+  position: relative;
+  padding: 12px 0px 5px 0;
+  width: 100%;
+  outline: 0;
+  border: 0;
+  box-shadow: 0 1px 0 0 #e5e5e5;
+  transition: box-shadow 150ms ease-out;
+  
+  &:focus {
+    box-shadow: 0 2px 0 0 blue;
+  }
+}
+
+.form-input.filled {
+  box-shadow: 0 2px 0 0 #4885ed;
+}
+
+option
+{
+    text-indent: 5px; 
+}

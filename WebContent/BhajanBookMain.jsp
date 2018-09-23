@@ -48,7 +48,7 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
         secKey = cookie.getValue();
 		SessionManager sesMgr = new SessionManager();
 		UserRoleVO userVO = sesMgr.getRememberedUser(secKey);
-		if (userVO == null) {
+		if (userVO == null) { 
 		    RequestDispatcher rd = request.getRequestDispatcher("LOGIN"); 
 			rd.forward(request,  response);
 			return;			
@@ -140,12 +140,13 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
                 		<a class="dropdown-item" onclick="showDeityBhajans('Shiva')" data-toggle="collapse" data-target=".navbar-collapse.show">Shiva</a>
                 		<a class="dropdown-item" onclick="showDeityBhajans('Subramanya')" data-toggle="collapse" data-target=".navbar-collapse.show">Subramanya</a>
                 		<a class="dropdown-item" onclick="showDeityBhajans('Vitthala')" data-toggle="collapse" data-target=".navbar-collapse.show">Vitthala</a>
-                	</div>
+                	</div> 
                 </li>
                                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">Account</a>
                 	<div class="dropdown-menu text-center text-lg-left" style="border:0px;">
                 		<a class="dropdown-item" onclick="showPlaylistMenu()" data-toggle="collapse" data-target=".navbar-collapse.show">Playlists</a>
+                		<a class="dropdown-item" id="changePasswordBtn" onclick="changePasswordModal()" data-toggle="modal" data-target="#changePasswordDiv">Change Password</a>
                 <li class="nav-item">
                     <a class="nav-link" href="#" onclick="logout()">Log Out</a>
                 </li>
@@ -154,6 +155,71 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
     </nav>
     </div>
 </div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="changePasswordDiv" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Change Password</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+        
+		  <form action="" id="chgPwdForm" class="form">
+		    <div class="form-group">
+		      <label class="form-label" for="oldPass">Enter your old password</label>
+		      <input id="oldPass" class="form-input" type="password" />
+		    </div>
+		    <div class="form-group">
+		      <label class="form-label" for="newPass">New password</label>
+		      <input id="newPass" class="form-input" type="password" />
+		    </div>
+		    <div class="form-group">
+		      <label class="form-label" for="confirmNewPassword">Confirm password</label>
+		      <input id="confirmNewPass" class="form-input" type="password" />
+		    </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" id="submitPass" onclick="changePasswordSubmit()">Submit</button>
+          <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+<!-- The Modal -->
+  <div class="modal fade" id="renamePlaylistDiv">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Rename Playlist</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <input type="hidden" id="playlistId">
+          <input type="text" id="newPlaylistName">
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+        	<button type="button" class="btn btn-dark" id="submitPass" onclick="renamePlaylist('playlistId', 'newPlaylistName')" data-dismiss="modal">Rename</button>
+        </div>
+        
+      </div> 
+    </div>
+  </div>
+
 
 <div id="search_bar" style="height:99px;background-color:white;">
 		<div class="w3-animate-opacity search_field" style="padding-top:30px;">
@@ -180,17 +246,17 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
   <div id="deity_card" class="col-sm-3 w-50 fade-in">
     <div class="row">
       <div class="" style="padding-left:30px; padding-bottom:20px;">
-            <div id="deity_image" class="responsive">
+            <div id="deity_image" class="">
             </div>
       </div>
     </div>
   </div>
  
   <div id="bhajans_card" class="col-sm-9 w3-animate-opacity">
-    <div class="row">
-      <div class="" style="padding-left:10px">
+    <div class="row" >
+      <div class="card-body col-md-9 col-sm-9 col-lg-6 offset-lg-1 text-left text-md-left p-2" style="padding-left:10px">
         <div id="bhajans_list_title" class="card-title" style="font-weight:bold;font-size:150%; text-align:center"></div>
-        <div class="subhead" id="subhead"></div>
+        <div class="subhead text-center text-md-center" id="subhead"></div>
         	<div class="container" style="padding:10px 20px;">
         			<div style="overflow:scroll; height:400px; overflow-x:hidden;overflow-y: scroll; /* has to be scroll, not auto */
   -webkit-overflow-scrolling: touch;">
@@ -202,14 +268,17 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
 			</div>
 	</div>
 
-	<div class="col-sm-12 col-md-4" id="playlist_options" style="display:none">
+	<div class="col-sm-9 col-md-9 col-lg-3" id="playlist_options" style="display:none">
         <h5 class="mt-4" style="font-weight:bold;"> Options</h5>
         <ul class="nav flex-column nav-pills" style=";">
             <li class="nav-item" >
-                <a class="nav-link" href="#">Clear playlist</a>
+                <a class="nav-link" onclick="clearPlaylist()" href="#">Clear playlist</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Delete playlist</a>
+                <a class="nav-link" onclick="deletePlaylist()" href="#">Delete playlist</a>
+            </li>
+             <li class="nav-item" id="renamePlaylist">
+                <a class="nav-link" onclick="renamePlaylistModal()" href="#" data-toggle="modal" data-target="#renamePlaylistDiv">Rename playlist</a>
             </li>
         </ul>
     </div>
@@ -245,7 +314,7 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
 						  <div id="create_playlist_section" style="display:none">
   			              <input id="new_playlist_name" type="text" minlength="3" maxlength="30"  placeholder="Enter playlist name" style="padding-left:10px;" required/>
   			              </div>						  
-						  <input type="submit" value="Create" id="submit_playlist_new" onclick="createPlaylist('new_playlist_name')" data-dismiss="modal">
+						  <input type="Button" value="Create" id="submit_playlist_new" onclick="createPlaylist('new_playlist_name')" data-dismiss="modal">
 						</form>
 			        </div>
 			        <div class="modal-footer">
@@ -258,10 +327,13 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
 			      </div> 
 			    </div>
 			  </div>
+			  
+			  
   
         </div>
         <br>
         <div id="bhajan_meaning" class="col-md-9"></div>
+        <div id="bhajan_shruti" class="col-md-9"></div>
         <div id="bhajan_raaga" class="col-md-9"></div>
         <div id="bhajan_beat" class="col-md-9"></div>
         <div id="bhajan_id_div"></div>
@@ -299,9 +371,8 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
                             <label for="subject">
                                 Subject</label>
                             <select id="opts" name="subject" class="form-control" required="required" onchange = "showForm()">
-                                <option value="na" selected="">Choose One:</option>
-                                <option value="1">Feedback</option>
-                                <option value="2">Bhajan Suggestions</option>
+                                <option value="feedback" selected >Feedback</option>
+                                <option value="bhajan_sugg">Bhajan Suggestions</option>
                             </select>
                         </div>
                     </div>
@@ -310,12 +381,16 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
                         
                             <div id = "feedback" style="display:block">
 							<form name= "feedf">
-		                        <div class="form-group">
+		                          <div class="form-group">
 		                            <label for="name">
 		                                Feedback</label>
 		                            <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required"
 		                                placeholder="Feedback"></textarea>
 		                        </div>
+		                        <div class="col-md-12 center-block">
+                       				<button onclick="sendFeedback()" type="submit" class="btn btn-light pull-right" id="btnContactUs">
+                           				Submit</button>
+                    			</div>
 							</form>
 							</div>
 
@@ -323,18 +398,22 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
 
 							<div id = "suggestions" style="display:none">
 							<form name= "suggf">
+							
 							<br>
 							  <text style="color:red">* Required</text><br><br>
 							  <text>Bhajan Title <text style="color:red">*</text></text>
-							  <input type="text" name="Title"  required="required">
+							  <input type="text" name="Title"  required>
 							  <br><br>
 							  <text>Lyrics <text style="color:red">*</text></text>
-							  <input type="text" name="Lyrics"  required="required">
+							  <input type="text" name="Lyrics"  required>
 							  <br><br>
 							  <text>Audio Link</text>
 							  <input type="text" name="Lyrics">
 							  <br><br>
 							  <text>Meaning</text>
+							  <input type="text" name="Lyrics">
+							  <br><br>
+							  <text>Shruti</text>
 							  <input type="text" name="Lyrics">
 							  <br><br>
 							  <text>Raaga</text>
@@ -343,14 +422,13 @@ if(null == session.getAttribute("BHAJAN_BOOK_USER")){
 							  <text>Beat</text>
 							  <input type="text" name="Lyrics">
 							  <br><br>
-							  
+							  <div class="col-md-12 center-block">
+                       			<button type="submit" class="btn btn-light pull-right" id="btnContactUs">
+                            	Submit</button>
+                    		</div>
 							</form> 
 							</div>
 
-                    </div>
-                    <div class="col-md-12 center-block">
-                        <button type="submit" class="btn btn-light pull-right" id="btnContactUs">
-                            Submit</button>
                     </div>
                 </div>
                 </form>

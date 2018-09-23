@@ -8,6 +8,7 @@ public class BhajanLyricsVO extends BhajanTitleVO {
 	private String beat;
 	private String audioFilePath;
 	private String favorite;
+	private String shruti;
 
 	// Todo: Add date added.
 	public BhajanLyricsVO() {
@@ -25,7 +26,7 @@ public class BhajanLyricsVO extends BhajanTitleVO {
 	public String getFavorite() {
 		return favorite;
 	}
-	
+
 	public String getLang() {
 		return lang;
 	}
@@ -33,7 +34,7 @@ public class BhajanLyricsVO extends BhajanTitleVO {
 	public String getLyrics() {
 		return lyrics;
 	}
-
+	
 	public String getMeaning() {
 		return meaning;
 	}
@@ -41,6 +42,7 @@ public class BhajanLyricsVO extends BhajanTitleVO {
 	public String getRaaga() {
 		return raaga;
 	}
+
 
 	private void initialize() {
 		lyrics = "";
@@ -54,6 +56,7 @@ public class BhajanLyricsVO extends BhajanTitleVO {
 	public void setAudioFilePath(String audioFilePath) {
 		this.audioFilePath = audioFilePath;
 	}
+
 	public void setBeat(String beat) {
 		this.beat = beat;
 	}
@@ -66,13 +69,13 @@ public class BhajanLyricsVO extends BhajanTitleVO {
 	public void setLyrics(String lyrics) {
 		this.lyrics = lyrics;
 	}
-
 	public void setMeaning(String meaning) {
 		this.meaning = meaning;
 	}
-	
+
 	public void setRaaga(String raaga) {
 		this.raaga = raaga;
 	}
+
 }
 

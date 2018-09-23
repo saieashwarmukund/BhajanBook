@@ -102,7 +102,7 @@ form p {
       -ms-user-select: none;
           user-select: none;
 }
-.formContainer input[type=password], .formContainer input[type=text] {
+.formContainer input[type=password], .formContainer input[type=text], .formContainer input[type=email] {
   background: transparent;
   border: none;
   box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.15);
@@ -111,7 +111,7 @@ form p {
   color: #fff;
   width: 100%;
 }
-.formContainer input[type=password]:focus, .formContainer input[type=text]:focus {
+.formContainer input[type=password]:focus, .formContainer input[type=text]:focus,  .formContainer input[type=email]:focus {
   box-shadow: inset 0 -2px 0 #fff;
 }
 
@@ -258,4 +258,14 @@ form p {
 :-moz-placeholder { /* Firefox 18- */
 	font-family: 'Montserrat' !important;
 	font-size: 13px;
+}
+
+a {
+   cursor: pointer;
+   pointer-events: all;
+ }
+ 
+.eye {
+	background:none;
+	border:none;
 }
