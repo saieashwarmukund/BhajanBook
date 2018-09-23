@@ -1,6 +1,6 @@
 
 var ALL_IMAGE = "/BhajanBook/images/deities/all.jpg"
-	var DEVI_IMAGE = "/BhajanBook/images/deities/devi.jpg";
+var DEVI_IMAGE = "/BhajanBook/images/deities/devi.jpg";
 var EASHWARAMBA_IMAGE = "/BhajanBook/images/deities/eashwaramba.jpg";
 var ENGLISH_IMAGE = "/BhajanBook/images/deities/english.jpg";
 var GANESHA_IMAGE = "/BhajanBook/images/deities/ganesha.jpg";
@@ -58,8 +58,8 @@ $(document).ready(function() {
 		$('.TFTD').append(data.thought);
 		$('.TFTD').append(" ~Baba");
 
-		//var myJSON = JSON.stringify(data);
-		//alert(myJSON);
+		// var myJSON = JSON.stringify(data);
+		// alert(myJSON);
 		userPlaylistList = data.userPlaylistList;
 	});
 });
@@ -136,8 +136,8 @@ function showDeityPic(deity) {
 
 
 function showLyricsCard(bhajanObject) {
-	// var myJSON = JSON.stringify(bhajanObject);
-	// alert(myJSON);
+	//var myJSON = JSON.stringify(bhajanObject);
+	//alert(myJSON);
 
 	hideAllCards();
 	showCard("lyrics_card");
@@ -148,10 +148,14 @@ function showLyricsCard(bhajanObject) {
 	var bhajanFavorite = document.getElementById("favorite");
 	var bhajanAddToPlaylist = document.getElementById("add_to_playlist");
 	var bhajanMeaning = document.getElementById("bhajan_meaning");
+	var bhajanShruti= document.getElementById("bhajan_shruti");
 	var bhajanRaaga = document.getElementById("bhajan_raaga");
 	var bhajanBeat = document.getElementById("bhajan_beat");
 	var bhajanIdDiv = document.getElementById("bhajan_id_div");
 	bhajanTitle.innerHTML = bhajanObject.bhajanTitle;
+
+	// var lines = fold(bhajanObject.lyrics, 50, true);
+    // var bhajanLyricsVar = lines.join('<br/>');
 	bhajanLyrics.innerHTML = bhajanObject.lyrics;
 	if (bhajanObject.audioFilePath != undefined && bhajanObject.audioFilePath != "") {
 		bhajanAudio.innerHTML = "<audio controls><source src="
@@ -162,10 +166,12 @@ function showLyricsCard(bhajanObject) {
 	}
 	if (bhajanObject.favorite == "Y") {
 		bhajanFavorite.innerHTML = "<i onclick='addToFav(this, " + bhajanObject.id + 
-		")' class='fa fa-heart' style='font-size:25px; color:#e2264d'></i>"		
+		")' id='fav-heart' class='fa fa-heart'" + 
+		"style='font-size:25px; color:#e2264d'></i>"		
 	} else {
 		bhajanFavorite.innerHTML = "<i onclick='addToFav(this, " + bhajanObject.id + 
-		")' class='fa fa-heart-o' style='font-size:25px; color:#e2264d'></i>"
+		")' id='unfav-heart' class='fa fa-heart-o' " +
+		"style='font-size:25px; color:#e2264d'></i>"
 	}
 	
 	bhajanAddToPlaylist.innerHTML = "<button type='button' class='btn btn-info btn-sm'  " +
@@ -181,7 +187,14 @@ function showLyricsCard(bhajanObject) {
 	} else {
 		bhajanMeaning.innerHTML = "";
 	}
-
+	
+	if (bhajanObject.shruti != undefined && bhajanObject.shruti != "") {
+		bhajanShruti.innerHTML = "<p><b>Shruti: </b>" + bhajanObject.shruti
+		+ "</p>";
+	} else {
+		bhajanShruti.innerHTML = "";
+	}
+		
 	if (bhajanObject.raaga != undefined && bhajanObject.raaga != "") {
 		bhajanRaaga.innerHTML = "<p><b>Raaga: </b>" + bhajanObject.raaga
 		+ "</p>";
@@ -312,6 +325,11 @@ function goBackToBhajans() {
 	bhajanAudio.innerHTML = "";
 	if (showingPlaylist) {
 		execShowPlaylist(currentPlaylist);
+		if (currentPlaylist == RECENT || currentPlaylist == TOP10 || currentPlaylist == FAVORITE) {
+			hideSection("playlist_options");
+		} else {
+			showSection("playlist_options");
+		}
 	}
 }
 
@@ -381,7 +399,6 @@ function addToFav(x, bhajanId) {
     			}*/
 				x.classList.toggle("fa-heart-o");
 				x.classList.toggle("fa-heart");
-
 				return;
 			}).fail(function(response) {
 				alert('Error: ' + response.responseText);
@@ -411,6 +428,152 @@ function showPlaylistMenu() {
 	showDeityPic("PLAYLISTS");
 	var title = document.getElementById("bhajans_list_title");
 	title.innerHTML = "Playlists";
+}
+
+function mouseoverPass() {
+	var icon = document.getElementById("icon")
+	var pass = document.getElementById('newPass');
+	var confirmPass = document.getElementById('confirmNewPass');
+	pass.type = "text";
+	confirmPass.type = "text";
+	icon.style.color='darkgray';
+	alert("waht")
+}
+
+function mouseoutPass() {
+	var icon = document.getElementById("icon")
+	var pass = document.getElementById('newPass');
+	var confirmPass = document.getElementById('confirmNewPass');
+	pass.type = "password";
+	confirmPass.type = "password";
+	icon.style.color='black';
+	alert("waht")
+
+}
+
+
+function changePasswordModal() {
+	var modal = document.getElementById('myModal');
+	document.getElementById('oldPass').value = "";
+	document.getElementById('newPass').value = "";
+	document.getElementById('confirmNewPass').value = "";
+
+    modal.style.display = "block";
+	// When the user clicks on <span> (x), close the modal
+	span.onclick = function() {
+	    modal.style.display = "none";
+	}
+
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+	    if (event.target == modal) {
+	        modal.style.display = "none"; 
+	    }
+	}
+}
+
+function changePasswordSubmit() {
+	var oldPass = document.getElementById("oldPass").value;
+	var newPass = document.getElementById("newPass").value;
+	var confirmNewPass = document.getElementById("confirmNewPass").value;
+	if (newPass != confirmNewPass) {
+		alert("New passwords do not match");
+		return;
+	}
+	if (oldPass == newPass) {
+		alert("Current password and new password are the same.");
+		return;
+	}
+	if (newPass.trim() == "") {
+		alert("New password is empty");
+		return;
+	}
+	var url = "/BhajanBook/rest/Authenticate/ChangePassword";
+	$.ajaxSetup({async: false});  
+	$.post(url, 
+			{
+		oldPassword:oldPass,
+		newPassword:newPass
+			},
+			function(data, status){
+				var myJSON = JSON.stringify(data);
+				// alert(myJSON);
+				if (data.status != 0) {
+					alert(data.mesg);
+					return;
+				}
+				alert("Password changed. Please log in with your new password.");
+				logout();
+				return;
+			}).fail(function(response) {
+				alert('Internal error occured while changing password. Please contact support.');
+				console.log('Error: ' + response.responseText);
+			});	
+}
+
+function renamePlaylistModal() {
+	var modal = document.getElementById('renamePlaylistDiv');
+	var btn = document.getElementById("renamePlaylist");
+	var sel = document.getElementById("activitylistbox");
+    var playlistIdVal = sel.options[sel.selectedIndex].value; // or sel.value
+    var text = sel.options[sel.selectedIndex].text; 
+  
+    // Get the playlist name.
+	document.getElementById('newPlaylistName').value = text;
+	document.getElementById('playlistId').value = playlistIdVal;
+    modal.style.display = "block";
+  
+    
+	// When the user clicks on <span> (x), close the modal
+	 span.onclick = function() {
+	    modal.style.display = "none";
+	}
+
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+	    if (event.target == modal) {
+	        modal.style.display = "none";
+	        
+	    }
+	}
+}
+
+function renamePlaylist(playlistNameId, newNameId) {
+	var playlistId = document.getElementById(playlistNameId).value;
+	var newPlaylistName = document.getElementById(newNameId).value;
+
+	if (newPlaylistName == "") {
+		alert("Empty Playlist Name");
+		return;
+	}
+	if (newPlaylistName.trim() == "") {
+		alert("Empty Playlist Name");
+		return;
+	}
+	
+	if (newPlaylistName.length > 30) {
+		alert("Playlist Name must be less than 30 characters");
+		return;
+	}
+
+	var url = "/BhajanBook/rest/Bhajan/RenamePlaylist";
+
+	$.ajaxSetup({async: false});  
+	$.post(url,
+			{
+		playlistId:playlistId,
+		newName:newPlaylistName
+			},
+			function(data, status){
+				var myJSON = JSON.stringify(data);
+				// alert(myJSON);
+				userPlaylistList = data;
+				refreshPlaylistbox(newPlaylistName);
+				return;
+			}).fail(function(response) {
+				alert('Internal error occured while creating playlist. Please contact support.');
+				console.log('Error: ' + response.responseText);
+			});	
 }
 
 function createPlaylist(playlistNameId) {
@@ -445,7 +608,7 @@ function createPlaylist(playlistNameId) {
 }
 
 function createPlaylistListbox() {
-	var htmlStr = "<select id='activitylistbox' onchange='showPlaylist()'>" +
+	var htmlStr = "<select id='activitylistbox'  class='text-center text-md-center' onchange='showPlaylist()'>" +
 	"<option value='RECENT'>Recently Added</option>" +
 	"<option value='TOP10'>Top 10</option>" +
 	"<option selected value='" + FAVORITE + "'>My Favorites</option>";
@@ -456,9 +619,39 @@ function createPlaylistListbox() {
 		htmlStr = htmlStr + "<option value='" + userPlaylistList[i].playlistKey + "'>" + userPlaylistList[i].playlistName + "</option>";
 	}
 	// Finally, end with appending 			"</select>"
-
+	
 	return htmlStr;
 }
+
+function refreshPlaylistbox(selectedOption) {
+	var sel = document.getElementById('activitylistbox');
+	var opt;  
+	// Clear the listbox
+	sel.innerHTML = ""
+	// add the static playlists.
+	opt = document.createElement("option");
+	opt.value = 'RECENT';
+	opt.text = 'Recently Added';
+	sel.add(opt);
+	opt = document.createElement("option");
+	opt.value ='TOP10';
+	opt.text = 'Top 10';
+	sel.add(opt);
+	opt = document.createElement("option");
+	opt.value = FAVORITE;
+	opt.text = 'My Favorites';
+	sel.add(opt);
+	for (let i = 0; i < userPlaylistList.length; i++) {
+		opt = document.createElement("option");
+		opt.value = userPlaylistList[i].playlistKey;
+		opt.text = userPlaylistList[i].playlistName;
+		if (userPlaylistList[i].playlistName == selectedOption) {
+			opt.selected = "selected";
+		}
+		sel.add(opt);
+	}
+}
+
 
 function showPlaylist() {
 	var option = document.getElementById("activitylistbox").value;
@@ -477,6 +670,7 @@ function showPlaylist() {
 
 	execShowPlaylist(option);
 }
+
 	
 function execShowPlaylist(option) {
 	$pagination = $('#pagination');
@@ -494,7 +688,7 @@ function execShowPlaylist(option) {
 			records = data;
 
 			if (records.length == 0) {
-				bhajanLoading.innerHTML = "<h4>No Bhajans added</h4>";
+				bhajanLoading.innerHTML = "<h4>Empty playlist</h4>";
 			} else {
 				console.log(records);
 				totalRecords = records.length;
@@ -509,6 +703,70 @@ function execShowPlaylist(option) {
 		}
 
 	});
+}
+
+
+function getSelectedText(elementId) {
+    var elt = document.getElementById(elementId);
+
+    if (elt.selectedIndex == -1)
+        return null;
+
+    return elt.options[elt.selectedIndex].text;
+}
+
+
+function deletePlaylist() {
+	var url = "/BhajanBook/rest/Bhajan/DeletePlaylist";
+	var option = document.getElementById("activitylistbox").value;
+	var sel = document.getElementById('activitylistbox').selectedIndex;
+	var name = document.getElementById("activitylistbox").options[sel].text;
+	var conf = confirm("Are you sure you want to delete " + name + "?");
+	if (conf == false) {
+		return;
+	}
+	$.ajaxSetup({async: false});  
+	
+	$.post(url,
+			{
+		playlistKey:option
+			},
+			function(data, status){
+				var myJSON = JSON.stringify(data);
+				 //alert(myJSON);
+				userPlaylistList = data;
+				showMainPage();
+				return;
+			}).fail(function(response) {
+				alert('Internal error occured while deleting playlist. Please contact support.');
+				console.log('Error: ' + response.responseText);
+			});
+}
+
+function clearPlaylist() {
+	var url = "/BhajanBook/rest/Bhajan/ClearPlaylist";
+	var option = document.getElementById("activitylistbox").value;
+	var sel = document.getElementById('activitylistbox').selectedIndex;
+	var name = document.getElementById("activitylistbox").options[sel].text;
+	var conf = confirm("Are you sure you want to clear " + name + "?");
+	if (conf == false) {
+		return;
+	}
+	$.ajaxSetup({async: false});  
+	
+	$.post(url,
+			{
+		playlistKey:option
+			},
+			function(data, status){
+				var myJSON = JSON.stringify(data);
+				 //alert(myJSON);
+				execShowPlaylist(option);
+				return;
+			}).fail(function(response) {
+				alert('Internal error occured while clearing playlist. Please contact support.');
+				console.log('Error: ' + response.responseText);
+			});
 }
 
 
@@ -601,12 +859,90 @@ function logout() {
 
 function showForm(){
 	var selopt = document.getElementById("opts").value;
-	if (selopt == 1) {
+	if (selopt == "feedback") {
 		document.getElementById("feedback").style.display="block";
 		document.getElementById("suggestions").style.display="none";
 	}
-	if (selopt == 2) {
+	if (selopt == "bhajan_sugg") {
 		document.getElementById("suggestions").style.display="block";
 		document.getElementById("feedback").style.display="none";
 	}
 }
+
+
+function sendFeedback() {
+	var feedback = document.getElementById("message").value;
+	
+	if (feedback.trim() == "") {
+		alert("Message cannot be empty");
+		return;
+	}
+	
+	$.ajaxSetup({async: false});  
+    $.post("/BhajanBook/rest/Feedback/",
+    	    {
+    	        message: feedback
+    	    },
+    	    function(data, status){
+    	    	if (status == 'success') {
+    	    		// global variable 
+	    	    	//alert(data.roleList);	 
+    	    		//var myJSON = JSON.stringify(data);
+    	    		//alert(myJSON);
+    	    		if (data.status == 0) {
+    	    			alert(data.mesg)
+    	    			showMainPage();
+    	    			return;
+    	    		}
+    	    		alert(data.mesg);
+    	    		return false;
+    	    	} 	 
+    	    }).fail(function(response) {
+    	        alert('Error processing request. Please contact support.');
+    	    });
+}
+
+
+function fold(s, n, useSpaces, a) {
+    a = a || [];
+    if (s.length <= n) {
+        a.push(s);
+        return a;
+    }
+    var line = s.substring(0, n);
+    if (! useSpaces) { // insert newlines anywhere
+        a.push(line);
+        return fold(s.substring(n), n, useSpaces, a);
+    }
+    else { // attempt to insert newlines after whitespace
+        var lastSpaceRgx = /[\s\r\n](?!.*\s)/;
+        var idx = line.search(lastSpaceRgx);
+        var nextIdx = n;
+        if (idx > 0) {
+            line = line.substring(0, idx);
+            nextIdx = idx;
+        }
+        alert(line);
+        a.push(line);
+        return fold(s.substring(nextIdx), n, useSpaces, a);
+    }
+}
+
+ 
+
+$('input').focus(function(){
+	  $(this).parents('.form-group').addClass('focused');
+	});
+
+	$('input').blur(function(){
+	  var inputValue = $(this).val();
+	  if ( inputValue == "" ) {
+	    $(this).removeClass('filled');
+	    $(this).parents('.form-group').removeClass('focused');  
+	  } else {
+	    $(this).addClass('filled');
+	  }
+	})  
+	
+	
+	

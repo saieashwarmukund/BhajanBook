@@ -73,6 +73,24 @@ public class BhajanService  {
     
     
     @POST
+    @Path("/ClearPlaylist") 
+    @Produces(MediaType.APPLICATION_JSON)
+    public  BaseVO    clearPlaylist(@Context HttpHeaders headers, @Context HttpServletRequest request,
+    		 @FormParam("playlistKey") String playlistKey) throws Exception {
+    	logger.info("clearPlaylist called.");
+  	   BhajanDAO bhajanDAO = new BhajanDAO();
+  	   SessionManager sesMgr = new SessionManager();
+  	   UserRoleVO userRoleVO = sesMgr.getUser(request);
+  	   String userId = userRoleVO.getUserId(); 
+  	   BaseVO retVO = bhajanDAO.clearPlaylist(userId, playlistKey);
+  	   if (retVO.getStatus() != BhajanBookConstants.SUCCESS) {
+  		   throw new Exception (retVO.getMesg());
+  	   }
+  	   return retVO;
+    }
+    
+    
+    @POST
     @Path("/CreatePlaylist") 
     @Produces(MediaType.APPLICATION_JSON)
     public List<PlaylistVO> createPlaylist(@Context HttpHeaders headers, @Context HttpServletRequest request,  
@@ -93,6 +111,26 @@ public class BhajanService  {
     }
     
     
+    @POST
+    @Path("/DeletePlaylist") 
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PlaylistVO>  deletePlaylist(@Context HttpHeaders headers, @Context HttpServletRequest request,
+    		 @FormParam("playlistKey") String playlistKey) throws Exception {
+    	logger.info("deletePlaylist called.");
+  	   BhajanDAO bhajanDAO = new BhajanDAO();
+  	   SessionManager sesMgr = new SessionManager();
+  	   UserRoleVO userRoleVO = sesMgr.getUser(request);
+  	   String userId = userRoleVO.getUserId(); 
+  	   BaseVO retVO = bhajanDAO.deletePlaylist(userId, playlistKey);
+  	   if (retVO.getStatus() != BhajanBookConstants.SUCCESS) {
+  		   throw new Exception (retVO.getMesg());
+  	   }
+  	   
+  	   SecurityDAO secDAO = new SecurityDAO();
+  	   List<PlaylistVO> newPlaylistList = secDAO.getUserPlaylist(userId);
+  	   return newPlaylistList;
+    }
+    
     @GET
     @Path("/Show") 
     @Produces(MediaType.APPLICATION_JSON)
@@ -111,7 +149,7 @@ public class BhajanService  {
  	   UserRoleVO userRoleVO = sesMgr.getUser(request);
  	   String userId = userRoleVO.getUserId(); // For later.
  	   BhajanLyricsVO bhajanVO = bhajanDAO.getBhajan(userId, id);
- 	   bhajanDAO.logBhajanAccess(id, userAgent, ip);
+ 	   bhajanDAO.logBhajanAccess(id, userId, userAgent, ip);
  	   return bhajanVO;
     }
     
@@ -193,6 +231,27 @@ public class BhajanService  {
   	   SecurityDAO secDAO = new SecurityDAO();
   	   List<PlaylistVO> newPlaylistList = secDAO.getUserPlaylist(userId);
   	   return newPlaylistList;
+    }
+    
+    @POST
+    @Path("/RenamePlaylist") 
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PlaylistVO> renamePlaylist(@Context HttpHeaders headers, @Context HttpServletRequest request,  
+    		@FormParam("playlistId") String playlistId, @FormParam("newName") String newPlaylistName)
+    throws Exception {
+    	logger.info("renamePlaylist called.");
+ 	   BhajanDAO bhajanDAO = new BhajanDAO();
+ 	   SessionManager sesMgr = new SessionManager();
+ 	   UserRoleVO userRoleVO = sesMgr.getUser(request);
+ 	   String userId = userRoleVO.getUserId(); 
+ 	   
+ 	   BaseVO retVO = bhajanDAO.renamePlaylist(userId, playlistId, newPlaylistName);
+ 	   if (retVO.getStatus() != BhajanBookConstants.SUCCESS) {
+ 		   throw new Exception (retVO.getMesg());
+ 	   }
+ 	   SecurityDAO secDAO = new SecurityDAO();
+ 	   List<PlaylistVO> newPlaylistList = secDAO.getUserPlaylist(userId);
+ 	   return newPlaylistList;
     }
     
     

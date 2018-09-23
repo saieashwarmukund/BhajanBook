@@ -10,10 +10,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bhajanbook.db.DBConnection;
 import org.bhajanbook.service.AuthService;
+import org.bhajanbook.service.BaseVO;
 import org.bhajanbook.service.BhajanLyricsVO;
 import org.bhajanbook.service.BhajanTitleVO;
 import org.bhajanbook.service.PlaylistVO;
 import org.bhajanbook.service.UserRoleVO;
+import org.bhajanbook.util.BhajanBookConstants;
 
 public class SecurityDAO {
 
@@ -132,6 +134,70 @@ public class SecurityDAO {
 		}
 
 	}
+	
+	public BaseVO changePassword(String userId, String oldPassword, String newPassword) {
+		Connection conn = null;
+		BaseVO retVO = new BaseVO();
+	 	newPassword = newPassword.replaceAll("'", "''");
+	 	oldPassword = oldPassword.replaceAll("'", "''");
+		try {
+			// Get DB Connection.
+			conn = DBConnection.getDBConnection();
+			Statement stmt = conn.createStatement();
+			StringBuffer queryStr = new StringBuffer();
+			
+			if (oldPassword == null) {
+				retVO.setStatus(BhajanBookConstants.FAILURE);
+				retVO.setMesg("Empty Old Password");
+				return retVO;
+			}
+
+			// find where userid and oldpass match
+			// error if oldpass does not match
+			// if match, change password 
+			
+			queryStr.append("select * from bhajan_book_user where user_id = '" + userId + "' ");
+			queryStr.append("and pass = sha1('" + oldPassword.trim() + "') ");
+			logger.info(queryStr);
+			
+			ResultSet rs = stmt.executeQuery(queryStr.toString());
+			
+			if (rs.next()) {
+				// Ignore.
+			} else {
+				retVO.setStatus(BhajanBookConstants.FAILURE);
+				retVO.setMesg("Current Password incorrect");
+				return retVO;
+			}
+			queryStr = new StringBuffer();
+			queryStr.append("update bhajan_book_user set pass = sha1('" + newPassword.trim() + "') ");
+			queryStr.append(" where user_id = '" + userId + "' ");
+			System.out.println(queryStr);
+			int rc = stmt.executeUpdate(queryStr.toString());
+			if (rc == 0) {
+				throw new Exception("Error changing password. Contact support. ");
+			}
+			retVO.setStatus(BhajanBookConstants.SUCCESS);
+			retVO.setMesg("Password changed");
+			return retVO;
+		} catch (Exception e) {
+			// TODO: report error to support.
+			// Return empty list.
+			e.printStackTrace();
+			retVO.setStatus(BhajanBookConstants.FAILURE);
+			retVO.setMesg("Internal Error. Contact support");
+			return retVO;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					// do nothing.
+				}
+			}
+		}
+	}
+	
 	public void createSecKey(String userId, String secKey) {
 		Connection conn = null;
 		UserRoleVO userRoleVO = new UserRoleVO();
@@ -223,9 +289,9 @@ public class SecurityDAO {
 				btVO.setPlaylistName(rs.getString("playlist_name"));
 				String ownYN = rs.getString("own_yn");
 				if ("Y".equals(ownYN)) {
-					btVO.setShared(false);
+					btVO.setOwned(true);
 				} else {
-					btVO.setShared(true);
+					btVO.setOwned(false);
 				}
 				playlistList.add(btVO);
 			}
@@ -298,5 +364,81 @@ public class SecurityDAO {
 			}
 		}
 	}
+	
+	/**
+	 *  -- check email does not exist in bhajan_book_user 
+	 *  -- check email does not exist in bhajan_book_new_user
+	 *  -- add row to table
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param passwd
+	 * @return
+	 */
 
+	public BaseVO registerAccount(String firstName, String lastName, String email, String passwd) {
+		Connection conn = null;
+		BaseVO retVO = new BaseVO();
+		firstName = firstName.replaceAll("'", "''");
+		lastName = lastName.replaceAll("'", "''");
+		email = email.replaceAll("'", "''");
+	 	passwd = passwd.replaceAll("'", "''");
+		try {
+			// Get DB Connection.
+			conn = DBConnection.getDBConnection();
+			Statement stmt = conn.createStatement();
+			StringBuffer queryStr = new StringBuffer();
+
+			queryStr.append("select * from bhajan_book_user where email_id = '" + email + "' ");
+			logger.info(queryStr);
+			
+			ResultSet rs = stmt.executeQuery(queryStr.toString());
+			
+			if (rs.next()) {
+				retVO.setStatus(BhajanBookConstants.FAILURE);
+				retVO.setMesg("An account with this email address already exists");
+				return retVO;
+			}
+		    queryStr = new StringBuffer();
+			queryStr.append("select * from bhajan_book_new_user where email_id = '" + email + "' ");
+			logger.info(queryStr);
+			
+			rs = stmt.executeQuery(queryStr.toString());
+			
+			if (rs.next()) {
+				retVO.setStatus(BhajanBookConstants.FAILURE);
+				retVO.setMesg("An account with this email address has already been registered. Please wait for the activation email.");
+				return retVO;
+			}
+			
+			
+			queryStr = new StringBuffer();
+			queryStr.append("insert into bhajan_book_new_user (first_name, last_name, email_id, pass, created_date)");
+			queryStr.append("values ('" + firstName + "', '" + lastName + "', '" + email + "',");
+			queryStr.append("sha1('" + passwd.trim() + "'), now())");
+			logger.info(queryStr);
+			int rc = stmt.executeUpdate(queryStr.toString());
+			if (rc == 0) { 
+				throw new Exception("Error registering account. Contact support. ");
+			}
+			retVO.setStatus(BhajanBookConstants.SUCCESS);
+			retVO.setMesg("Account registered");
+			return retVO;
+		} catch (Exception e) {
+			// TODO: report error to support.
+			// Return empty list.
+			e.printStackTrace();
+			retVO.setStatus(BhajanBookConstants.FAILURE);
+			retVO.setMesg("Internal Error. Contact support");
+			return retVO;
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (Exception e) {
+					// do nothing.
+				}
+			}
+		}
+	}
 }

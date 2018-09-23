@@ -2,3 +2,4 @@ DATABASE_HOST=localhost:3306
 DATABASE=bhajandb
 DBUSER=bhajanadm
 DBPASSWORD=Pa55word
+ADMIN_EMAIL=mramadoss@gmail.com,saieashwar@gmail.com,saikripamukund@gmail.com

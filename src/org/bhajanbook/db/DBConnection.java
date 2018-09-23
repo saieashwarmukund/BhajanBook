@@ -12,6 +12,7 @@ public class DBConnection {
 	private static final String CONNUSER = BhajanBookProps.getProp("DBUSER");
 	private static final String DWP = BhajanBookProps.getProp("DBPASSWORD");
 	
+	
 	public static Connection getDBConnection() throws Exception {
 
 		try {

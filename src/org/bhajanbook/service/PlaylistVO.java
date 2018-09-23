@@ -3,7 +3,7 @@ package org.bhajanbook.service;
 public class PlaylistVO {
 	String playlistKey;
 	String playlistName;
-	boolean shared;
+	boolean owned;
 	
 	public PlaylistVO() {
 		initialize();
@@ -27,8 +27,8 @@ public class PlaylistVO {
 		this.playlistName = "";
 	}
 
-	public boolean isShared() {
-		return shared;
+	public boolean isOwned() {
+		return owned;
 	}
 	
 	
@@ -39,8 +39,8 @@ public class PlaylistVO {
 	public void setPlaylistName(String playlistName) {
 		this.playlistName = playlistName;
 	}
-	public void setShared(boolean shared) {
-		this.shared = shared;
+	public void setOwned(boolean owned) {
+		this.owned = owned;
 	}
 
 }
